@@ -14,9 +14,9 @@ const Home = {
   <div v-else class="h-full rounded-2xl overflow-y-scroll p-2">
   
       <div>
-      <div class="h-90">
+      <!--spacer-->
       
-      </div>
+      <!--spacer-->
         <div v-for="(staff,index) in allStaff" class="rounded-[40px]" :class="theme.containerHigh">
           <div @click="toDetailsPage(index)" class="p-2 mt-2 h-20 flex items-center">
              <img class="ml-1 size-16 bg-slate-900 rounded-full" :src="staff.image_url">

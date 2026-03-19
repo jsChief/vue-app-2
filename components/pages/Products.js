@@ -7,7 +7,7 @@ const Products = {
   template: `
   <div class="h-full w-full flex flex-col place-content-evenly items-center gap-2">
   
-    <div :class="theme.border" class="border rounded-4xl p-2 text-center w-90/100 mx-auto h-30 flex flex-col place-content-around backdrop-blur">
+    <div :class="theme.border" class="border rounded-4xl p-2 w-90/100 mx-auto h-30 flex flex-col items-center place-content-between backdrop-blur">
       
       <div class="w-full flex items-center rounded-4xl" :class="theme.containerHighest">
         <button class="w-12 fa fa-search rounded-l-4xl"></button>
@@ -15,15 +15,15 @@ const Products = {
       </div>
       
       <div class="flex w-full items-center place-content-between p-1" :class="theme.subtitle">
-        <button @click="toggleFilter('approved')" class="rounded-3xl border h-10 w-22 p-2 flex items-center gap-1" :class="[{'bg-green-500 text-white': approvedTag}, theme.border]">
+        <button @click="toggleFilter('approved')" class="rounded-3xl border h-10 w-22 p-2 flex items-center gap-1" :class="[{'bg-green-500 text-white': searchTags.approved}, theme.border]">
           <span class="text-sm fa fa-check-circle"></span>
           <span class="text-xs">approved</span>
         </button>
-        <button @click="toggleFilter('pending')" class="rounded-3xl text-sm border h-10 w-22 p-2 flex items-center gap-1" :class="[{'bg-orange-500 text-white': pendingTag}, theme.border]">
+        <button @click="toggleFilter('pending')" class="rounded-3xl text-sm border h-10 w-22 p-2 flex items-center gap-1" :class="[{'bg-orange-500 text-white': searchTags.pending}, theme.border]">
           <span class="text-sm fa fa-clock"></span>
           <span class="text-xs">pending</span>
         </button>
-        <button @click="toggleFilter('rejected')" class="rounded-3xl text-sm border h-10 w-22 p-2 flex items-center gap-1" :class="[{'bg-red-500 text-white': rejectedTag}, theme.border]">
+        <button @click="toggleFilter('rejected')" class="rounded-3xl text-sm border h-10 w-22 p-2 flex items-center gap-1" :class="[{'bg-red-500 text-white': searchTags.rejected}, theme.border]">
           <span class="text-sm fa fa-circle-xmark"></span>
           <span class="text-xs">rejected</span>
         </button>
@@ -68,22 +68,33 @@ const Products = {
   },
   data() {
     return {
-      approvedTag: true,
+      /*approvedTag: true,
       pendingTag: false,
       rejectedTag: false,
-      searchResults: [],
+      searchResults: [],*/
       isLoading: false,
       loadError: false,
-      selectedFilters: [],
+      //selectedFilters: [],
       searchQuery: '',
       tm: 0
     }
   },
   created(){
+    if(!this.$store.state.productsFetched){
     this.selectedFilters.push("approved");
     this.fetchFilteredProducts();
+    }
   },
   computed: {
+    selectedFilters(){
+      return this.$store.state.productFilters
+    },
+    searchTags(){
+      return this.$store.state.tags
+    },
+    searchResults(){
+      return this.$store.state.products
+    },
     darkTheme() {
       return this.$store.state.darkTheme
     },
@@ -93,7 +104,8 @@ const Products = {
   },
   methods: {
     toDetails(productIndex){
-      console.log(productIndex);
+      //console.log(productIndex);
+      this.$router.push('/productdetails/'+productIndex);
     },
     delayFetch(){
       clearTimeout(this.tm);
@@ -102,25 +114,25 @@ const Products = {
         this.fetchFilteredProducts();
       }, 2500);
     },
+    
     toggleFilter(filter){
       var status = false;
       if(this.selectedFilters.some((e)=>e==filter)){
-        let index = this.selectedFilters.indexOf(filter);
-        this.selectedFilters.splice(index,1);
+        this.$store.commit("REMOVE_FILTER", filter)
         status = false;
       } else {
-        this.selectedFilters.push(filter);
+        this.$store.commit("ADD_FILTER", filter)
         status = true;
       }
       switch (filter) {
         case 'approved':
-          this.approvedTag = status;
+          this.$store.commit("SET_APPROVED_TAG", status);
           break;
         case 'pending':
-          this.pendingTag = status;
+          this.$store.commit("SET_PENDING_TAG", status);
           break;
         case 'rejected':
-          this.rejectedTag = status;
+          this.$store.commit("SET_REJECTED_TAG", status);
           break;
         
         default:
@@ -134,7 +146,7 @@ const Products = {
 
   try {
     if (this.selectedFilters.length == 0 && this.searchQuery == '') {
-      this.searchResults = [];
+      //this.searchResults = [];
       this.isLoading = false;
       return;
     }
@@ -154,11 +166,13 @@ const Products = {
 
     if (error) throw error;
 
-    this.searchResults = data;
+    //this.searchResults = data;
+    this.$store.commit("SET_PRODUCTS", data);
+    this.$store.commit("SET_PRODUCTS_FETCHED", true);
   } catch (e) {
     console.log('error occurred: ' + e);
     this.loadError = true;
-    this.searchResults = [];
+    //this.searchResults = [];
   }
 
   this.isLoading = false;

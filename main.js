@@ -17,11 +17,11 @@ const router = new VueRouter({
   //mode: 'history',
 routes: [
 { path: '/g', component: Login },
-{ path: '/', component: Home },
+{ path: '/home', component: Home },
 { path: '/about/:selectedStaffIndex', component: About, props: true },
 { path: '/staffdetails/:staffIndex', component: StaffDetails, props: true },
 { path: '/businesses', component: Businesses },
-{ path: '/products', component: Products },
+{ path: '/', component: Products },
 { path: '/users', component: Users },
 { path: '/settings', component: Settings },
 { path: '/productdetails/:productIndex', component: ProductDetails, props: true },

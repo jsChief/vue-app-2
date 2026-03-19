@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Image Carousel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --accent: #AC41FF;
+      --accent-dim: rgba(172, 65, 255, 0.15);
+      --track: #1a1a2e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #0d0d1a;
+      background-image:
+        radial-gradient(ellipse 60% 50% at 20% 10%, rgba(172,65,255,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 90%, rgba(80,30,160,0.10) 0%, transparent 70%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* ── Slide transition ── */
+    .slide-enter-active,
+    .slide-leave-active { transition: all 0.5s cubic-bezier(0.77, 0, 0.18, 1); position: absolute; width: 100%; }
+    .slide-enter        { transform: translateX(100%); opacity: 0; }
+    .slide-leave-to     { transform: translateX(-100%); opacity: 0; }
+
+    .slide-prev-enter-active,
+    .slide-prev-leave-active { transition: all 0.5s cubic-bezier(0.77, 0, 0.18, 1); position: absolute; width: 100%; }
+    .slide-prev-enter        { transform: translateX(-100%); opacity: 0; }
+    .slide-prev-leave-to     { transform: translateX(100%); opacity: 0; }
+
+    /* ── Dot ── */
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.25);
+      transition: all 0.35s ease;
+      cursor: pointer;
+    }
+    .dot.active {
+      width: 28px;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(172,65,255,0.7);
+    }
+
+    /* ── Arrow button ── */
+    .arrow-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(6px);
+    }
+    .arrow-btn:hover {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      box-shadow: 0 0 16px rgba(172,65,255,0.3);
+    }
+    .arrow-btn svg { stroke: white; }
+
+    /* ── Progress bar ── */
+    .progress-bar {
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.1s linear;
+      box-shadow: 0 0 6px var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+<div id="app" class="w-full flex flex-col items-center px-4">
+
+  <!-- Label -->
+  <p class="text-xs tracking-[0.25em] uppercase text-purple-300 opacity-60 mb-4">Featured Collection</p>
+
+  <!-- Card shell -->
+  <div class="relative w-full max-w-xl rounded-2xl overflow-hidden"
+       style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 32px 80px rgba(0,0,0,0.5);">
+
+    <!-- Progress bar -->
+    <div class="absolute top-0 left-0 right-0 z-20" style="height:2px; background:rgba(255,255,255,0.06);">
+      <div class="progress-bar" :style="{ width: progress + '%' }"></div>
+    </div>
+
+    <!-- Slide area -->
+    <div class="relative overflow-hidden" style="height: 380px;">
+      <transition :name="direction === 'next' ? 'slide' : 'slide-prev'">
+        <div :key="current"
+             class="absolute inset-0 w-full h-full"
+             @touchstart="onTouchStart"
+             @touchend="onTouchEnd">
+
+          <!-- Image -->
+          <img :src="slides[current].img"
+               :alt="slides[current].title"
+               class="w-full h-full object-cover" />
+
+          <!-- Gradient overlay -->
+          <div class="absolute inset-0"
+               style="background: linear-gradient(to top, rgba(13,13,26,0.92) 0%, rgba(13,13,26,0.3) 50%, transparent 100%);"></div>
+
+          <!-- Caption -->
+          <div class="absolute bottom-0 left-0 right-0 p-6">
+            <span class="inline-block text-xs tracking-widest uppercase px-2 py-0.5 rounded mb-2"
+                  style="background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(172,65,255,0.3);">
+              {{ slides[current].tag }}
+            </span>
+            <h2 class="text-white text-2xl leading-snug mb-1"
+                style="font-family: 'DM Serif Display', serif;">
+              {{ slides[current].title }}
+            </h2>
+            <p class="text-sm text-gray-400 leading-relaxed">{{ slides[current].desc }}</p>
+          </div>
+        </div>
+      </transition>
+    </div>
+
+    <!-- Controls row -->
+    <div class="flex items-center justify-between px-5 py-4"
+         style="border-top: 1px solid rgba(255,255,255,0.06);">
+
+      <!-- Prev -->
+      <button class="arrow-btn" @click="prev">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+
+      <!-- Dots -->
+      <div class="flex items-center gap-2">
+        <div v-for="(s, i) in slides" :key="i"
+             class="dot"
+             :class="{ active: i === current }"
+             @click="goTo(i)">
+        </div>
+      </div>
+
+      <!-- Next -->
+      <button class="arrow-btn" @click="next">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Slide counter -->
+    <div class="absolute top-4 right-4 z-20 text-xs text-white/40"
+         style="font-variant-numeric: tabular-nums;">
+      <span class="text-white/80">{{ String(current + 1).padStart(2,'0') }}</span>
+      &nbsp;/&nbsp;
+      {{ String(slides.length).padStart(2,'0') }}
+    </div>
+  </div>
+
+  <!-- Thumbnail strip -->
+  <div class="flex gap-2 mt-4">
+    <div v-for="(s, i) in slides" :key="i"
+         class="rounded-lg overflow-hidden cursor-pointer transition-all duration-300"
+         :style="{
+           width: '52px', height: '40px',
+           opacity: i === current ? '1' : '0.4',
+           border: i === current ? '2px solid #AC41FF' : '2px solid transparent',
+           boxShadow: i === current ? '0 0 10px rgba(172,65,255,0.5)' : 'none'
+         }"
+         @click="goTo(i)">
+      <img :src="s.img" :alt="s.title" class="w-full h-full object-cover"/>
+    </div>
+  </div>
+
+</div>
+
+<script>
+new Vue({
+  el: '#app',
+  data: {
+    current: 0,
+    direction: 'next',
+    autoplayTimer: null,
+    progress: 0,
+    progressTimer: null,
+    touchStartX: 0,
+    autoplayInterval: 4000,
+    slides: [
+      {
+        img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
+        title: 'Peaks Beyond the Clouds',
+        tag: 'Landscape',
+        desc: 'Where silence speaks and granite towers pierce the morning mist.'
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&q=80',
+        title: 'Still Waters at Dusk',
+        tag: 'Serenity',
+        desc: 'A glassy lake holds the last light of the fading sun in perfect stillness.'
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80',
+        title: 'The Green Valley',
+        tag: 'Nature',
+        desc: 'Rolling meadows stretch endlessly beneath an open, breathing sky.'
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80',
+        title: 'Milky Way Cathedral',
+        tag: 'Astro',
+        desc: 'Billions of stars arch overhead, indifferent and breathtaking.'
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
+        title: 'Ridge at Sunrise',
+        tag: 'Adventure',
+        desc: 'The first golden rays ignite the stone and remind you you\'re alive.'
+      }
+    ]
+  },
+  mounted() {
+    this.startAutoplay();
+  },
+  beforeDestroy() {
+    this.clearAutoplay();
+  },
+  methods: {
+    next() {
+      this.direction = 'next';
+      this.current = (this.current + 1) % this.slides.length;
+      this.resetAutoplay();
+    },
+    prev() {
+      this.direction = 'prev';
+      this.current = (this.current - 1 + this.slides.length) % this.slides.length;
+      this.resetAutoplay();
+    },
+    goTo(i) {
+      this.direction = i > this.current ? 'next' : 'prev';
+      this.current = i;
+      this.resetAutoplay();
+    },
+    startAutoplay() {
+      this.progress = 0;
+      const step = 100 / (this.autoplayInterval / 50);
+      this.progressTimer = setInterval(() => {
+        this.progress += step;
+        if (this.progress >= 100) {
+          this.progress = 0;
+          this.direction = 'next';
+          this.current = (this.current + 1) % this.slides.length;
+        }
+      }, 50);
+    },
+    clearAutoplay() {
+      clearInterval(this.progressTimer);
+    },
+    resetAutoplay() {
+      this.clearAutoplay();
+      this.progress = 0;
+      this.startAutoplay();
+    },
+    onTouchStart(e) {
+      this.touchStartX = e.touches[0].clientX;
+    },
+    onTouchEnd(e) {
+      const diff = this.touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) {
+        diff > 0 ? this.next() : this.prev();
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

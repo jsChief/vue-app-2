@@ -20,9 +20,16 @@ const store = new Vuex.Store({
             container: ' bg-neutral-800/50'
           }
         },
-        darkTheme: true,
+        tags: {
+          approved: true,
+          pending: false,
+          rejected: false
+        },
+        productsFetched: false,
+        darkTheme: false,
         staff: [],
         products: [],
+        productFilters: [],
         productsLoading: false,
         productsLoadError: null,
         loading: false,
@@ -45,39 +52,38 @@ const store = new Vuex.Store({
         SET_PRODUCTS(state, products) {
           state.products = products
         },
+        SET_PRODUCTS_FETCHED(state, value) {
+          state.productsFetched = value
+        },
+        SET_APPROVED_TAG(state, value) {
+          state.tags.approved = value
+        },
+        SET_PENDING_TAG(state, value) {
+          state.tags.pending = value
+        },
+        SET_REJECTED_TAG(state, value) {
+          state.tags.rejected = value
+        },
+        ADD_FILTER(state, filter){
+          state.productFilters.push(filter);
+        },
+        REMOVE_FILTER(state, filter){
+          let index = state.productFilters.indexOf(filter);
+          state.productFilters.splice(index,1);
+        },
+        /*
         SET_PRODUCTS_LOADING(state, status) {
           state.productLoading = status
         },
         SET_PRODUCTS_LOAD_ERROR(state, error) {
           state.productsLoadError = error
-        },
+        },*/
         SET_DARKTHEME(state, value){
           state.darkTheme = value
         }
       },
       actions: {
-        async fetchProducts({ commit }) {
-          commit('SET_PRODUCTS_LOADING', true)
-          commit('SET_PRODUCTS_LOAD_ERROR', null)
-          try {
-            const { data, error } = await client.from('staff_profiles').select('*');
-            if (error) {
-              commit('SET_LOADING', false);
-              commit('SET_ERROR', 'Failed to fetch staff');
-              return;
-            }
-            
-            commit('SET_STAFF', data)
-            //console.log(data);
-          } catch (err) {
-            commit('SET_PRODUCTS_LOADING', false);
-            commit('SET_PRODUCTS_LOAD_ERROR', 'Failed to fetch staff')
-          } finally {
-            setTimeout(()=>{
-              commit('SET_PRODUCTS_LOADING', false);
-            }, 1500)
-          }
-        },
+        
         async fetchStaff({ commit }) {
           commit('SET_LOADING', true)
           commit('SET_ERROR', null)

@@ -219,3 +219,48 @@
     .myborder {
        border: 1px solid rgba(172,65,255,0.12);
     }
+    
+    .brand { color: #AC41FF; }
+
+    .img-wrap {
+      background: linear-gradient(145deg, #1a0d2e, #110820);
+      border: 1px solid rgba(172, 65, 255, 0.12);
+    }
+
+    .pill {
+      background: rgba(172, 65, 255, 0.8);
+      border: 1px solid rgba(172, 65, 255, 0.2);
+      color: #E5BEFF;
+      font-size: 0.7rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .btn-cart {
+      background: #AC41FF;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      transition: background 0.2s;
+    }
+    .btn-cart:hover { background: #bf5aff; }
+
+    .btn-wish {
+      border: 1px solid rgba(172, 65, 255, 0.3);
+      color: rgba(255,255,255,0.6);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-wish:hover {
+      border-color: #AC41FF;
+      color: #fff;
+    }
+
+    .star-on  { color: #AC41FF; }
+    .star-off { color: rgba(172, 65, 255, 0.25); }
