@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Staff Details</title>
+  <script src="./js/TW4.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --brand: #AC41FF;
+      --brand-dim: #8B2FD6;
+      --brand-glow: rgba(172, 65, 255, 0.25);
+      --brand-faint: rgba(172, 65, 255, 0.07);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background-color: #080810;
+      font-family: 'DM Sans', sans-serif;
+      color: #e2e2f0;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, .font-display { font-family: 'Syne', sans-serif; }
+
+    /* Animated gradient background */
+    .bg-mesh {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 80% 10%, rgba(172,65,255,0.14) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 90%, rgba(172,65,255,0.09) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 40% at 50% 50%, rgba(20,10,40,0.5) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    /* Noise overlay */
+    .noise::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .content { position: relative; z-index: 2; }
+
+    /* Avatar glow ring */
+    .avatar-ring {
+      background: conic-gradient(
+        from 0deg,
+        #AC41FF, #d580ff, #6a0fd4, #AC41FF
+      );
+      padding: 3px;
+      border-radius: 9999px;
+      animation: spin-slow 6s linear infinite;
+    }
+    @keyframes spin-slow {
+      to { transform: rotate(360deg); }
+    }
+
+    .avatar-inner {
+      border-radius: 9999px;
+      overflow: hidden;
+      background: #13101e;
+    }
+
+    /* Stat card */
+    .stat-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(172,65,255,0.15);
+      border-radius: 16px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .stat-card:hover {
+      background: rgba(172,65,255,0.07);
+      border-color: rgba(172,65,255,0.4);
+    }
+
+    /* Skill badge */
+    .skill-badge {
+      background: rgba(172,65,255,0.1);
+      border: 1px solid rgba(172,65,255,0.25);
+      color: #d5a0ff;
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, border-color 0.2s;
+      cursor: default;
+    }
+    .skill-badge:hover {
+      background: rgba(172,65,255,0.22);
+      border-color: #AC41FF;
+      color: #fff;
+    }
+
+    /* Section label */
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #AC41FF;
+      opacity: 0.8;
+    }
+
+    /* Timeline dot */
+    .timeline-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #AC41FF;
+      box-shadow: 0 0 10px rgba(172,65,255,0.7);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    /* Status pill */
+    .status-active {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52,211,153,0.25);
+      color: #6ee7b7;
+      border-radius: 999px;
+      padding: 3px 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #34d399;
+      animation: pulse-green 2s ease-in-out infinite;
+    }
+    @keyframes pulse-green {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(52,211,153,0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 5px rgba(52,211,153,0); }
+    }
+
+    /* Action button */
+    .btn-primary {
+      background: linear-gradient(135deg, #AC41FF, #7b22d4);
+      border-radius: 12px;
+      padding: 10px 22px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #fff;
+      transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 4px 20px rgba(172,65,255,0.3);
+      cursor: pointer;
+    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-ghost {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 10px 22px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 500;
+      font-size: 0.85rem;
+      color: #a0a0c0;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      cursor: pointer;
+    }
+    .btn-ghost:hover {
+      background: rgba(172,65,255,0.08);
+      border-color: rgba(172,65,255,0.3);
+      color: #e0d0ff;
+    }
+
+    /* Progress bar */
+    .progress-bg {
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+      height: 4px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #AC41FF, #d580ff);
+      box-shadow: 0 0 8px rgba(172,65,255,0.5);
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(172,65,255,0.2), transparent);
+      margin: 0;
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.55s ease both; }
+    .delay-1 { animation-delay: 0.08s; }
+    .delay-2 { animation-delay: 0.16s; }
+    .delay-3 { animation-delay: 0.24s; }
+    .delay-4 { animation-delay: 0.32s; }
+    .delay-5 { animation-delay: 0.40s; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(172,65,255,0.3); border-radius: 99px; }
+  </style>
+</head>
+<body class="noise">
+
+  <div class="bg-mesh"></div>
+
+  <div class="content max-w-2xl mx-auto px-4 py-10">
+
+    <!-- Back nav -->
+    <div class="fade-up flex items-center gap-2 mb-8 cursor-pointer group w-fit">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#AC41FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      <span class="text-sm font-display font-semibold text-purple-400 group-hover:text-white transition-colors">All Staff</span>
+    </div>
+
+    <!-- Hero card -->
+    <div class="fade-up delay-1 rounded-[24px] p-6 mb-4"
+         style="background: rgba(255,255,255,0.025); border: 1px solid rgba(172,65,255,0.18); backdrop-filter: blur(12px);">
+
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+
+        <!-- Avatar -->
+        <div class="avatar-ring flex-shrink-0" style="width:84px; height:84px;">
+          <div class="avatar-inner w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, #1e1030, #2a1550);">
+            <span class="font-display font-bold text-2xl" style="color:#AC41FF;">JR</span>
+          </div>
+        </div>
+
+        <!-- Name & role -->
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-wrap items-center gap-3 mb-1">
+            <h1 class="font-display font-extrabold text-2xl text-white tracking-tight leading-tight">
+              James Rivera
+            </h1>
+            <div class="status-active">
+              <div class="status-dot"></div>
+              Active
+            </div>
+          </div>
+          <p class="text-purple-300 font-display font-semibold text-sm mb-2">Senior Product Designer</p>
+          <div class="flex flex-wrap items-center gap-3 text-xs text-slate-400">
+            <span class="flex items-center gap-1">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Lagos, Nigeria
+            </span>
+            <span class="flex items-center gap-1">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              Design Dept.
+            </span>
+            <span class="flex items-center gap-1">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Since Jan 2021
+            </span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-wrap gap-2 flex-shrink-0">
+          <button class="btn-primary">Message</button>
+          <button class="btn-ghost">Edit</button>
+        </div>
+      </div>
+
+      <hr class="divider my-5"/>
+
+      <!-- Quick stats -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="stat-card p-4 text-center">
+          <p class="font-display font-bold text-xl text-white">48</p>
+          <p class="text-xs text-slate-400 mt-0.5">Projects</p>
+        </div>
+        <div class="stat-card p-4 text-center">
+          <p class="font-display font-bold text-xl text-white">4.9</p>
+          <p class="text-xs text-slate-400 mt-0.5">Rating</p>
+        </div>
+        <div class="stat-card p-4 text-center">
+          <p class="font-display font-bold text-xl" style="color:#AC41FF;">3y 2m</p>
+          <p class="text-xs text-slate-400 mt-0.5">Tenure</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bio -->
+    <div class="fade-up delay-2 rounded-[20px] p-5 mb-4"
+         style="background: rgba(255,255,255,0.025); border: 1px solid rgba(172,65,255,0.12);">
+      <p class="section-label mb-3">About</p>
+      <p class="text-sm text-slate-300 leading-relaxed">
+        James is a results-driven product designer with a passion for human-centred experiences. He blends strategic thinking with visual craft to deliver interfaces that are both beautiful and deeply functional. Known for bringing calm clarity to complex design challenges.
+      </p>
+    </div>
+
+    <!-- Skills -->
+    <div class="fade-up delay-3 rounded-[20px] p-5 mb-4"
+         style="background: rgba(255,255,255,0.025); border: 1px solid rgba(172,65,255,0.12);">
+      <p class="section-label mb-4">Skills</p>
+
+      <div class="space-y-4">
+        <div>
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs text-slate-300 font-medium">UI / UX Design</span>
+            <span class="text-xs text-purple-400 font-display font-bold">95%</span>
+          </div>
+          <div class="progress-bg"><div class="progress-fill" style="width:95%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs text-slate-300 font-medium">Figma & Prototyping</span>
+            <span class="text-xs text-purple-400 font-display font-bold">90%</span>
+          </div>
+          <div class="progress-bg"><div class="progress-fill" style="width:90%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs text-slate-300 font-medium">Design Systems</span>
+            <span class="text-xs text-purple-400 font-display font-bold">85%</span>
+          </div>
+          <div class="progress-bg"><div class="progress-fill" style="width:85%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs text-slate-300 font-medium">User Research</span>
+            <span class="text-xs text-purple-400 font-display font-bold">78%</span>
+          </div>
+          <div class="progress-bg"><div class="progress-fill" style="width:78%"></div></div>
+        </div>
+      </div>
+
+      <hr class="divider my-5"/>
+
+      <div class="flex flex-wrap gap-2">
+        <span class="skill-badge">Figma</span>
+        <span class="skill-badge">Framer</span>
+        <span class="skill-badge">Vue.js</span>
+        <span class="skill-badge">Tailwind</span>
+        <span class="skill-badge">Motion Design</span>
+        <span class="skill-badge">Accessibility</span>
+        <span class="skill-badge">Research</span>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="fade-up delay-4 rounded-[20px] p-5 mb-4"
+         style="background: rgba(255,255,255,0.025); border: 1px solid rgba(172,65,255,0.12);">
+      <p class="section-label mb-4">Experience</p>
+
+      <div class="space-y-5">
+        <div class="flex gap-4">
+          <div class="flex flex-col items-center">
+            <div class="timeline-dot"></div>
+            <div class="flex-1 w-px mt-2" style="background: rgba(172,65,255,0.2);"></div>
+          </div>
+          <div class="pb-4">
+            <p class="font-display font-bold text-sm text-white">Senior Product Designer</p>
+            <p class="text-xs text-purple-400 font-medium mt-0.5">Acme Corp · Jan 2021 – Present</p>
+            <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">Leading the design of core product features, managing a team of 3 designers, and establishing the company-wide design system.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="flex flex-col items-center">
+            <div class="timeline-dot" style="background:#6a0fd4; box-shadow: 0 0 8px rgba(106,15,212,0.6);"></div>
+            <div class="flex-1 w-px mt-2" style="background: rgba(172,65,255,0.2);"></div>
+          </div>
+          <div class="pb-4">
+            <p class="font-display font-bold text-sm text-white">UI Designer</p>
+            <p class="text-xs text-purple-400 font-medium mt-0.5">Pixel Studio · Mar 2019 – Dec 2020</p>
+            <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">Designed interfaces for 12+ client projects across fintech, health, and e-commerce verticals.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="flex flex-col items-center">
+            <div class="timeline-dot" style="background:#3d1060; box-shadow: 0 0 8px rgba(61,16,96,0.6);"></div>
+          </div>
+          <div>
+            <p class="font-display font-bold text-sm text-white">Graphic Designer</p>
+            <p class="text-xs text-purple-400 font-medium mt-0.5">Freelance · 2017 – 2019</p>
+            <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">Brand identity, print, and early digital work for small businesses and startups.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="fade-up delay-5 rounded-[20px] p-5"
+         style="background: rgba(255,255,255,0.025); border: 1px solid rgba(172,65,255,0.12);">
+      <p class="section-label mb-4">Contact</p>
+      <div class="space-y-3">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-[10px] flex items-center justify-center flex-shrink-0"
+               style="background: rgba(172,65,255,0.1); border: 1px solid rgba(172,65,255,0.2);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#AC41FF" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <span class="text-sm text-slate-300">james.rivera@acmecorp.com</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-[10px] flex items-center justify-center flex-shrink-0"
+               style="background: rgba(172,65,255,0.1); border: 1px solid rgba(172,65,255,0.2);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#AC41FF" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1 19.79 19.79 0 0 1 1.61 4.56 2 2 0 0 1 3.6 2.37h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9.91A16 16 0 0 0 14.09 16l.94-.94a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <span class="text-sm text-slate-300">+234 801 234 5678</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-[10px] flex items-center justify-center flex-shrink-0"
+               style="background: rgba(172,65,255,0.1); border: 1px solid rgba(172,65,255,0.2);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#AC41FF" stroke-width="2"><path d="M21 2H3v16h5v4l4-4h5l4-4V2zM11 11V7m2 4V7"/></svg>
+          </div>
+          <span class="text-sm text-slate-300">@jrivera · Slack</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

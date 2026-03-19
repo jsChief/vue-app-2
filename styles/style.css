@@ -1,0 +1,221 @@
+* {
+  outline: none;
+}
+
+@font-face {
+  src: url('../assets/Syne-VariableFont_wght.ttf');
+  font-family: 'Syne';
+}
+
+.text-bf {
+  font-family: Syne;
+}
+
+:root {
+      --brand: #AC41FF;
+      --brand-dim: #8B2FD6;
+      --brand-glow: rgba(172, 65, 255, 0.25);
+      --brand-faint: rgba(172, 65, 255, 0.07);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, .font-display { font-family: 'Syne', sans-serif; }
+
+    /* Animated gradient background */
+    .bg-mesh {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 80% 10%, rgba(172,65,255,0.54) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 90%, rgba(172,65,255,0.59) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 40% at 50% 50%, rgba(20,10,40,0.5) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    /* Noise overlay */
+    .noise::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .content { position: relative; z-index: 2; }
+
+    /* Avatar glow ring */
+    .avatar-ring {
+      background: conic-gradient(
+        from 0deg,
+        #AC41FF, #d580ff, #6a0fd4, #AC41FF
+      );
+      padding: 3px;
+      border-radius: 18px;
+      /*
+      animation: spin-slow 6s linear infinite;
+      */
+    }
+    @keyframes spin-slow {
+      to { transform: rotate(360deg); }
+    }
+
+    .avatar-inner {
+      border-radius: 16px;
+      
+      overflow: hidden;
+      background: #13101e;
+    }
+
+    /* Stat card */
+    .stat-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(172,65,255,0.15);
+      border-radius: 16px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .stat-card:hover {
+      background: rgba(172,65,255,0.07);
+      border-color: rgba(172,65,255,0.4);
+    }
+
+    /* Skill badge */
+    .skill-badge {
+      background: rgba(172,65,255,0.1);
+      border: 1px solid rgba(172,65,255,0.25);
+      color: #d5a0ff;
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, border-color 0.2s;
+      cursor: default;
+    }
+    .skill-badge:hover {
+      background: rgba(172,65,255,0.22);
+      border-color: #AC41FF;
+      color: #fff;
+    }
+
+    /* Section label */
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #AC41FF;
+      opacity: 0.8;
+    }
+
+    /* Timeline dot */
+    .timeline-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #AC41FF;
+      box-shadow: 0 0 10px rgba(172,65,255,0.7);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    /* Status pill */
+    .status-active {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52,211,153,0.25);
+      color: #6ee7b7;
+      border-radius: 999px;
+      padding: 3px 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #34d399;
+      /*
+      animation: pulse-green 2s ease-in-out infinite;*/
+    }
+    @keyframes pulse-green {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(52,211,153,0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 5px rgba(52,211,153,0); }
+    }
+
+    /* Action button */
+    .btn-primary {
+      background: linear-gradient(135deg, #AC41FF, #7b22d4);
+      border-radius: 12px;
+      padding: 10px 22px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #fff;
+      transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 4px 20px rgba(172,65,255,0.3);
+      cursor: pointer;
+    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-ghost {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 10px 22px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      cursor: pointer;
+    }
+    .btn-ghost:hover {
+      background: rgba(172,65,255,0.08);
+      border-color: rgba(172,65,255,0.3);
+    }
+
+    /* Progress bar */
+    .progress-bg {
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+      height: 4px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #AC41FF, #d580ff);
+      box-shadow: 0 0 8px rgba(172,65,255,0.5);
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(172,65,255,0.2), transparent);
+      margin: 0;
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.55s ease both; }
+    .delay-1 { animation-delay: 0.08s; }
+    .delay-2 { animation-delay: 0.16s; }
+    .delay-3 { animation-delay: 0.24s; }
+    .delay-4 { animation-delay: 0.32s; }
+    .delay-5 { animation-delay: 0.40s; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; height: 20px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(172,65,255,0); border-radius: 99px; }
+    
+    .myborder {
+       border: 1px solid rgba(172,65,255,0.12);
+    }

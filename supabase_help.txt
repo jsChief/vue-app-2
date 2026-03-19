@@ -1,0 +1,175 @@
+Common Filter Methods
+Method                  SQL Equivalent
+.eq('col', val)          col = val
+.neq('col', val)         col != val
+.gt('col', val)          col > val
+.lt('col', val)          col < val
+.like('col', '%val%')    col LIKE '%val%'
+.in('col', [1,2,3])      col IN (1,2,3)
+.is('col', null)         col IS NULL
+
+
+
+CREATE — Insert data
+// Insert a single row
+const { data, error } = await supabase
+  .from('posts')
+  .insert({ title: 'Hello World', body: 'My first post', user_id: 1 })
+  .select()
+
+// Insert multiple rows
+const { data, error } = await supabase
+  .from('posts')
+  .insert([
+    { title: 'Post 1', body: 'Content 1' },
+    { title: 'Post 2', body: 'Content 2' },
+  ])
+  .select()
+
+
+DELETE
+// Delete a single row
+const { error } = await supabase
+  .from('posts')
+  .delete()
+  .eq('id', 42)
+
+// Delete multiple rows matching a condition
+const { error } = await supabase
+  .from('posts')
+  .delete()
+  .eq('user_id', 1)
+Error Handling (always do this)
+const { data, error } = await supabase.from('posts').select('*')
+
+if (error) {
+  console.error('Supabase error:', error.message)
+  return
+}
+
+console.log('Data:', data)
+
+
+UPDATE
+// Update rows matching a condition
+const { data, error } = await supabase
+  .from('posts')
+  .update({ title: 'Updated Title', body: 'Updated content' })
+  .eq('id', 42)
+  .select()
+
+// Upsert (insert or update if exists)
+const { data, error } = await supabase
+  .from('posts')
+  .upsert({ id: 42, title: 'Upserted Post' })
+  .select()
+
+
+READ
+// Get all rows
+const { data, error } = await supabase.from('posts').select('*')
+
+// Select specific columns
+const { data, error } = await supabase
+  .from('posts')
+  .select('id, title, created_at')
+
+// Filter with conditions
+const { data, error } = await supabase
+  .from('posts')
+  .select('*')
+  .eq('user_id', 1)       // WHERE user_id = 1
+  .order('created_at', { ascending: false })
+  .limit(10)
+
+// Fetch a single row
+const { data, error } = await supabase
+  .from('posts')
+  .select('*')
+  .eq('id', 42)
+  .single()
+
+// Join related tables
+const { data, error } = await supabase
+  .from('posts')
+  .select('*, users(name, email)')  // foreign key join
+  
+  
+  
+  
+  
+  Sign Up
+<script>
+  const { createClient } = supabase
+  const client = createClient('YOUR_URL', 'YOUR_KEY')
+
+  async function signUp(email, password) {
+    const { data, error } = await client.auth.signUp({ email, password })
+    if (error) return console.error(error.message)
+    console.log('User created:', data.user)
+  }
+</script>
+Sign In
+async function signIn(email, password) {
+  const { data, error } = await client.auth.signInWithPassword({ email, password })
+  if (error) return console.error(error.message)
+  console.log('Logged in:', data.user)
+}
+
+Sign Out
+async function signOut() {
+  const { error } = await client.auth.signOut()
+  if (error) return console.error(error.message)
+  console.log('Signed out')
+}
+
+Get Current User / Session
+// Get current user
+const { data: { user } } = await client.auth.getUser()
+console.log(user)  // null if not logged in
+
+// Get current session (includes access token)
+const { data: { session } } = await client.auth.getSession()
+console.log(session)
+Listen for Auth State Changes
+// Fires on sign in, sign out, token refresh, etc.
+client.auth.onAuthStateChange((event, session) => {
+  console.log('Event:', event)     // SIGNED_IN, SIGNED_OUT, etc.
+  console.log('Session:', session)
+
+  if (event === 'SIGNED_IN') {
+    // update your UI
+  }
+  if (event === 'SIGNED_OUT') {
+    // redirect to login
+  }
+})
+
+Password Reset
+// 1. Send reset email
+async function resetPassword(email) {
+  const { error } = await client.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://yoursite.com/update-password'
+  })
+  if (error) return console.error(error.message)
+  console.log('Reset email sent')
+}
+
+// 2. Update password after user clicks email link
+async function updatePassword(newPassword) {
+  const { error } = await client.auth.updateUser({ password: newPassword })
+  if (error) return console.error(error.message)
+  console.log('Password updated')
+}
+
+Protect Pages / Check Auth
+async function requireAuth() {
+  const { data: { user } } = await client.auth.getUser()
+
+  if (!user) {
+    window.location.href = '/login.html'  // redirect if not logged in
+    return
+  }
+
+  return user
+}
