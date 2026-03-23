@@ -16,6 +16,12 @@
       --brand-dim: #8B2FD6;
       --brand-glow: rgba(172, 65, 255, 0.25);
       --brand-faint: rgba(172, 65, 255, 0.07);
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #18181f;
+      --border: #2a2a36;
+      --text: #e8e8f0;
+      --muted: #6b6b80;
     }
 
     * { box-sizing: border-box; }
@@ -23,6 +29,10 @@
     body {
       font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
+    }
+    
+    a {
+      color: var(--brand);
     }
 
     h1, h2, h3, .font-display { font-family: 'Syne', sans-serif; }
@@ -37,14 +47,6 @@
       pointer-events: none;
     }
 
-    /* Noise overlay */
-    .noise::after {
-      content: '';
-      position: fixed; inset: 0; z-index: 1;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      opacity: 0.5;
-      pointer-events: none;
-    }
 
     .content { position: relative; z-index: 2; }
 
@@ -108,7 +110,6 @@
       font-size: 0.65rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: #AC41FF;
       opacity: 0.8;
     }
 
@@ -196,7 +197,6 @@
       border: none;
       height: 1px;
       background: linear-gradient(90deg, transparent, rgba(172,65,255,0.2), transparent);
-      margin: 0;
     }
 
     /* Fade-in animation */
@@ -215,6 +215,9 @@
     ::-webkit-scrollbar { width: 4px; height: 20px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(172,65,255,0); border-radius: 99px; }
+    
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { scrollbar-width: none; }
     
     .myborder {
        border: 1px solid rgba(172,65,255,0.12);
@@ -238,10 +241,6 @@
       text-transform: uppercase;
     }
 
-    .divider {
-      height: 1px;
-      background: rgba(255, 255, 255, 0.07);
-    }
 
     .btn-cart {
       background: #AC41FF;
@@ -264,3 +263,74 @@
 
     .star-on  { color: #AC41FF; }
     .star-off { color: rgba(172, 65, 255, 0.25); }
+    
+    .slide-enter-active,
+    .slide-leave-active { transition: all 0.5s cubic-bezier(0.77, 0, 0.18, 1); position: absolute; width: 100%; }
+    .slide-enter        { transform: translateX(100%); opacity: 0; }
+    .slide-leave-to     { transform: translateX(-100%); opacity: 0; }
+
+    .slide-prev-enter-active,
+    .slide-prev-leave-active { transition: all 0.5s cubic-bezier(0.77, 0, 0.18, 1); position: absolute; width: 100%; }
+    .slide-prev-enter        { transform: translateX(-100%); opacity: 0; }
+    .slide-prev-leave-to     { transform: translateX(100%); opacity: 0; }
+
+    /* ── Dot ── */
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 9999px;
+      transition: all 0.35s ease;
+      cursor: pointer;
+    }
+    .dot.active {
+      width: 28px;
+      background: var(--brand-dim);
+      box-shadow: 0 0 10px rgba(172,65,255,0.7);
+    }
+
+    /* ── Arrow button ── */
+    .arrow-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: flex; align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(6px);
+    }
+    .arrow-btn:active {
+      background: var(--brand-dim);
+      border-color: var(--brand);
+      box-shadow: 0 0 16px rgba(172,65,255,0.3);
+    }
+
+    /* ── Progress bar ── */
+    .progress-bar {
+      height: 2px;
+      background: var(--brand);
+      transition: width 0.1s linear;
+      box-shadow: 0 0 6px var(--brand);
+    }
+    
+    /* Store card */
+    .store-card {
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .store-card:hover {
+      border-color: rgba(172,65,255,0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(172,65,255,0.1);
+    }
+
+    .store-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }

@@ -6,43 +6,54 @@ const store = new Vuex.Store({
             subtitle: 'text-gray-600',
             border: ' border-slate-800/10',
             themeBorder: ' myborder',
-            containerHighest: ' bg-white/50',
+            containerHighest: ' bg-white/70',
             containerHigh: ' bg-neutral-100/50',
-            container: ' bg-neutral-200/50 shadow-sm'
+            container: ' bg-neutral-200/50',
+            inverseContainer: ' bg-neutral-800/50',
+            surface: ' bg-neutral-100/90',
           },
           dark: {
             text: 'text-white',
             subtitle: 'text-gray-400',
             border: ' border-slate-200/10',
             themeBorder: ' myborder',
-            containerHighest: ' bg-neutral-500/30',
+            containerHighest: ' bg-neutral-500/50',
             containerHigh: ' bg-neutral-600/30',
-            container: ' bg-neutral-800/50'
+            container: ' bg-neutral-800/50',
+            inverseContainer: ' bg-neutral-200/50',
+            surface: ' bg-neutral-800/80'
           }
         },
-        tags: {
+        productsFilterTags: {
           approved: true,
           pending: false,
           rejected: false
         },
+        usersFilterTags: {
+          approved: true,
+          suspended: false,
+          banned: false
+        },
         productsFetched: false,
-        darkTheme: false,
+        storesFetched: false,
+        usersFetched: false,
         staff: [],
         products: [],
-        productFilters: [],
+        stores: [],
+        users: [],
+        productsFilters: [],
+        usersFilters: [],
         productsLoading: false,
         productsLoadError: null,
         loading: false,
-        error: null
+        error: null,
+        darkTheme: true,
       },
       getters: {
         allStaff: state => state.staff,
         staffById: state => id => state.staff.find(u => u.id === id)
       },
       mutations: {
-        SET_STAFF(state, staff) {
-          state.staff = staff
-        },
         SET_LOADING(state, status) {
           state.loading = status
         },
@@ -52,35 +63,34 @@ const store = new Vuex.Store({
         SET_PRODUCTS(state, products) {
           state.products = products
         },
-        SET_PRODUCTS_FETCHED(state, value) {
-          state.productsFetched = value
+        SET_STAFF(state, staff) {
+          state.staff = staff
         },
-        SET_APPROVED_TAG(state, value) {
-          state.tags.approved = value
+        SET_USERS(state, users) {
+          state.users = users
         },
-        SET_PENDING_TAG(state, value) {
-          state.tags.pending = value
+        SET_DATA_FETCHED(state, value) {
+          state[value.type] = value.data
         },
-        SET_REJECTED_TAG(state, value) {
-          state.tags.rejected = value
+        SET_TAG(state, value){
+          state[value.type][value.tag] = value.data;
         },
-        ADD_FILTER(state, filter){
-          state.productFilters.push(filter);
+        ADD_FILTER(state, value){
+          state[value.type].push(value.data);
         },
-        REMOVE_FILTER(state, filter){
-          let index = state.productFilters.indexOf(filter);
-          state.productFilters.splice(index,1);
+        REMOVE_FILTER(state, value){
+          let index = state[value.type].indexOf(value.data);
+          state[value.type].splice(index,1);
         },
-        /*
-        SET_PRODUCTS_LOADING(state, status) {
-          state.productLoading = status
-        },
-        SET_PRODUCTS_LOAD_ERROR(state, error) {
-          state.productsLoadError = error
-        },*/
         SET_DARKTHEME(state, value){
           state.darkTheme = value
-        }
+        },
+        SET_STORES(state, stores) {
+          state.stores = stores
+        },
+        SET_STORES_FETCHED(state, value) {
+          state.storesFetched = value
+        },
       },
       actions: {
         

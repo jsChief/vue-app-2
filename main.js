@@ -7,6 +7,7 @@ import {Products} from './components/pages/Products.js';
 import {Users} from './components/pages/Users.js';
 import {Settings} from './components/pages/Settings.js';
 import {ProductDetails} from './components/pages/Product_Details.js';
+import {Stores} from './components/pages/Stores.js';
 
 /*
 const { data, error } = await client.from('staff_profiles').select('*');
@@ -16,15 +17,16 @@ const { data, error } = await client.from('staff_profiles').select('*');
 const router = new VueRouter({
   //mode: 'history',
 routes: [
-{ path: '/g', component: Login },
-{ path: '/home', component: Home },
+{ path: '/t', component: Login },
+{ path: '/', component: Home },
 { path: '/about/:selectedStaffIndex', component: About, props: true },
 { path: '/staffdetails/:staffIndex', component: StaffDetails, props: true },
 { path: '/businesses', component: Businesses },
-{ path: '/', component: Products },
+{ path: '/products', component: Products },
 { path: '/users', component: Users },
 { path: '/settings', component: Settings },
 { path: '/productdetails/:productIndex', component: ProductDetails, props: true },
+{ path: '/stores', component: Stores },
 ]
 });
 
@@ -32,7 +34,6 @@ var vue = new Vue({
 el: "#app",
 store,
 data: {
- countr: 5,
  navOpen: false
 },
 computed: {
@@ -42,12 +43,12 @@ computed: {
   themeClass(){
     return this.$store.state.darkTheme? 'text-white' : 'text-black';
   },
-  count(){ return this.$store.state.count },
-  doubleCount(){ return this.$store.getters.doubleCount },
-  user(){ return this.$store.state.user }
 },
 methods: {
-  increment() { this.$store.commit('INCREMENT') },
+  toggleTheme(){
+    let theme = this.$store.state.darkTheme;
+    this.$store.commit("SET_DARKTHEME", !theme)
+  },
   fetchUser() { this.$store.dispatch('fetchUser') },
   toAbout(){
     router.replace('/about');

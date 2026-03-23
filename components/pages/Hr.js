@@ -75,7 +75,7 @@ const Home = {
           text: 'flamin!'
         }
       },
-      showNav: false
+      showNav: false,
     }
   },
   components: {

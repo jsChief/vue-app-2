@@ -38,7 +38,7 @@ const Products = {
         <div v-else-if="loadError" class="h-full  flex flex-col gap-2 items-center place-content-center">
         <img class="w-16" src="../../assets/error-icon.svg">
         <button @click="fetchFilteredProducts" class="text-white bg-purple-800 px-3 py-2 rounded-3xl w-fit">
-          reload
+          retry
         </button>
         </div>
         <div v-else class="p-2 h-full rounded-[30px] overflow-y-scroll">
@@ -87,17 +87,18 @@ const Products = {
   },
   computed: {
     selectedFilters(){
-      return this.$store.state.productFilters
+      return this.$store.state.productsFilters
     },
     searchTags(){
-      return this.$store.state.tags
+      return this.$store.state.productsFilterTags
     },
     searchResults(){
       return this.$store.state.products
     },
+    /*
     darkTheme() {
       return this.$store.state.darkTheme
-    },
+    },*/
     theme() {
       return this.$store.state.darkTheme ? this.$store.state.theme.dark : this.$store.state.theme.light
     }
@@ -114,35 +115,27 @@ const Products = {
         this.fetchFilteredProducts();
       }, 2500);
     },
-    
     toggleFilter(filter){
-      var status = false;
-      if(this.selectedFilters.some((e)=>e==filter)){
-        this.$store.commit("REMOVE_FILTER", filter)
-        status = false;
-      } else {
-        this.$store.commit("ADD_FILTER", filter)
-        status = true;
-      }
-      switch (filter) {
-        case 'approved':
-          this.$store.commit("SET_APPROVED_TAG", status);
-          break;
-        case 'pending':
-          this.$store.commit("SET_PENDING_TAG", status);
-          break;
-        case 'rejected':
-          this.$store.commit("SET_REJECTED_TAG", status);
-          break;
-        
-        default:
-          // Tab to edit
-      }
+      var hasFilter = this.selectedFilters.some((e)=>e==filter);
+      var filterCommit = hasFilter ? "REMOVE_FILTER" : "ADD_FILTER";
+      var status = hasFilter ? false : true;
+      
+      this.$store.commit(filterCommit, {
+        type: 'productsFilters',
+        data: filter
+      })
+      
+      this.$store.commit("SET_TAG", {
+        type: 'productsFilterTags',
+        tag: filter,
+        data: status
+      });
+      
       this.fetchFilteredProducts();
     },
     async fetchFilteredProducts() {
-  this.loadError = false;
-  this.isLoading = true;
+    this.loadError = false;
+    this.isLoading = true;
 
   try {
     if (this.selectedFilters.length == 0 && this.searchQuery == '') {
@@ -168,7 +161,11 @@ const Products = {
 
     //this.searchResults = data;
     this.$store.commit("SET_PRODUCTS", data);
-    this.$store.commit("SET_PRODUCTS_FETCHED", true);
+    this.$store.commit("SET_DATA_FETCHED", {
+      type: 'productsFetched',
+      data: true
+    });
+    //console.log(data)
   } catch (e) {
     console.log('error occurred: ' + e);
     this.loadError = true;

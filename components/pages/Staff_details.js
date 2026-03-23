@@ -1,5 +1,6 @@
 const StaffDetails = {
-  template: `<div class="h-full">
+  template: `<div class="h-full overflow-y-scroll no-scrollbar" :class="theme.surface">
+  
    <!-- Hero card -->
     <div class="fade-up delay-1 rounded-[24px] p-6 mb-4"
          style="background: rgba(255,255,255,0.025); border: 1px solid rgba(172,65,255,0.18); backdrop-filter: blur(12px);">
@@ -49,56 +50,117 @@ const StaffDetails = {
         </div>
       </div>
       
-      <!--
-      <hr class="divider my-5"/>
-      -->
-      <!-- Quick stats --
-      <div class="grid grid-cols-3 gap-3">
+      
+      <hr class="divider mt-4"/>
+     
+      <!-- Quick stats -->
+      <div class="grid grid-cols-3 gap-3 mt-6">
         <div class="stat-card p-4 text-center">
-          <p class="font-display font-bold text-xl text-white">48</p>
+          <p class="font-display font-bold text-xl">48</p>
           <p class="text-xs text-slate-400 mt-0.5">Projects</p>
         </div>
         <div class="stat-card p-4 text-center">
-          <p class="font-display font-bold text-xl text-white">4.9</p>
+          <p class="font-display font-bold text-xl">4.9</p>
           <p class="text-xs text-slate-400 mt-0.5">Rating</p>
         </div>
         <div class="stat-card p-4 text-center">
           <p class="font-display font-bold text-xl" style="color:#AC41FF;">3y 2m</p>
           <p class="text-xs text-slate-400 mt-0.5">Tenure</p>
         </div>
-      </div>-->
+      </div>
       
     </div>
     
     
-    <!-- Contact --
-    <div class="fade-up delay-5 rounded-[20px] p-5"
+    <!-- Bio -->
+    <div class="fade-up delay-2 rounded-[20px] p-5 mb-4"
          style="background: rgba(255,255,255,0.025); border: 1px solid rgba(172,65,255,0.12);">
-      <p class="section-label mb-4">Contact</p>
-      <div class="space-y-3">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-[10px] flex items-center justify-center flex-shrink-0"
-               style="background: rgba(172,65,255,0.1); border: 1px solid rgba(172,65,255,0.2);">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#AC41FF" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <p class="section-label mb-3">About</p>
+      <p class="text-sm leading-relaxed" :class="theme.subtitle">
+        James is a results-driven product designer with a passion for human-centred experiences. He blends strategic thinking with visual craft to deliver interfaces that are both beautiful and deeply functional. Known for bringing calm clarity to complex design challenges.
+      </p>
+    </div>
+
+    <!-- Skills -->
+    <div class="fade-up delay-3 rounded-[20px] p-5 mb-4"
+         style="background: rgba(255,255,255,0.025); border: 1px solid rgba(172,65,255,0.12);">
+      <p class="section-label mb-4">Skills</p>
+
+      <div class="space-y-4">
+        <div>
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs font-medium" :class="theme.subtitle">UI / UX Design</span>
+            <span class="text-xs text-purple-400 font-display font-bold">95%</span>
           </div>
-          <span class="text-sm text-slate-300">{{ staff.email }}</span>
+          <div class="progress-bg"><div class="progress-fill" style="width:95%"></div></div>
         </div>
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-[10px] flex items-center justify-center flex-shrink-0"
-               style="background: rgba(172,65,255,0.1); border: 1px solid rgba(172,65,255,0.2);">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#AC41FF" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1 19.79 19.79 0 0 1 1.61 4.56 2 2 0 0 1 3.6 2.37h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9.91A16 16 0 0 0 14.09 16l.94-.94a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <div>
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs font-medium" :class="theme.subtitle">Figma & Prototyping</span>
+            <span class="text-xs text-purple-400 font-display font-bold">90%</span>
           </div>
-          <span class="text-sm text-slate-300">{{ staff.phone }}</span>
+          <div class="progress-bg"><div class="progress-fill" style="width:90%"></div></div>
         </div>
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-[10px] flex items-center justify-center flex-shrink-0"
-               style="background: rgba(172,65,255,0.1); border: 1px solid rgba(172,65,255,0.2);">
-            <img src="assets/whatsapp.svg">
+        <div>
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs font-medium" :class="theme.subtitle">Design Systems</span>
+            <span class="text-xs text-purple-400 font-display font-bold">85%</span>
           </div>
-          <span class="text-sm text-slate-300">{{ staff.phone }}</span>
+          <div class="progress-bg"><div class="progress-fill" style="width:85%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="text-xs font-medium" :class="theme.subtitle">User Research</span>
+            <span class="text-xs text-purple-400 font-display font-bold">78%</span>
+          </div>
+          <div class="progress-bg"><div class="progress-fill" style="width:78%"></div></div>
         </div>
       </div>
-      -->
+
+      <hr class="divider my-5"/>
+
+      <div class="flex flex-wrap gap-2">
+        <span class="skill-badge">Figma</span>
+        <span class="skill-badge">Framer</span>
+        <span class="skill-badge">Vue.js</span>
+        <span class="skill-badge">Tailwind</span>
+        <span class="skill-badge">Motion Design</span>
+        <span class="skill-badge">Accessibility</span>
+        <span class="skill-badge">Research</span>
+      </div>
+    </div>
+
+    
+    
+    <!-- Contact -->
+    <div class="fade-up backdrop-blur delay-5 rounded-[20px] p-5"
+         style="background: rgba(255,255,255,0.025); border: 1px solid rgba(172,65,255,0.12);">
+      <p class="section-label mb-4 text-purple-500">Contact</p>
+      <div class="space-y-3">
+        <div class="flex items-center gap-3">
+          <div class="size-8 rounded-[6px] flex items-center place-content-center"
+               style="background: rgba(172,65,255,0.1); border: 1px solid rgba(172,65,255,0.2);">
+            <span class="fa fa-square-envelope text-purple-500 text-3xl"></span>
+          </div>
+          <span class="text-sm" :class="theme.subtitle">{{ staff.email }}</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="size-8 rounded-[6px] flex items-center place-content-center"
+               style="background: rgba(172,65,255,0.1); border: 1px solid rgba(172,65,255,0.2);">
+               <span class="text-3xl fa fa-square-phone text-purple-500"></span>
+            
+          </div>
+          <span class="text-sm" :class="theme.subtitle">{{ staff.phone }}</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="size-8 rounded-[6px] flex items-center place-content-center"
+               style="background: rgba(172,65,255,0.1); border: 1px solid rgba(172,65,255,0.2);">
+            <span class="text-3xl fab fa-square-whatsapp text-purple-500"></span>
+          </div>
+          <span class="text-sm" :class="theme.subtitle">{{ staff.phone }}</span>
+        </div>
+      </div>
+      
       
     </div>
     
