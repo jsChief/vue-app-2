@@ -35,16 +35,15 @@
     
     
   </div>
+  <script src="./config.js" type="text/javascript"></script>
   <script>
-  
   const { createClient } = supabase;
 
-  const client = createClient('https://iywrbvtzkfyhcbsiybke.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5d3JidnR6a2Z5aGNic2l5YmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU5NzE2NDUsImV4cCI6MjA2MTU0NzY0NX0.0GWAxHnXsWhtbbbOm4PXJd8UUTHMKJq9eE62AEn29dg',
+  const client = createClient(CONFIG.API_URL,CONFIG.ANON_KEY,
   {
-    
-    /*auth: {
+    auth: {
     persistSession: true
-  }*/
+  }
   }
   )
   
