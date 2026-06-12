@@ -11,10 +11,6 @@ import {Settings} from './components/pages/Settings.js';
 import {ProductDetails} from './components/pages/Product_Details.js';
 import {Stores} from './components/pages/Stores.js';
 
-/*
-const { data, error } = await client.from('staff_profiles').select('*');
-*/
-
 
 const router = new VueRouter({
   //mode: 'history',
