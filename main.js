@@ -18,10 +18,11 @@ const { data, error } = await client.from('staff_profiles').select('*');
 
 const router = new VueRouter({
   //mode: 'history',
+  
 routes: [
 { path: '/', component: Login },
 { path: '/home', component: Home },
-{ path: '/tem', component: Template },
+{ path: '/temp', component: Template },
 { path: '/about/:selectedStaffIndex', component: About, props: true },
 { path: '/staffdetails/:staffIndex', component: StaffDetails, props: true },
 { path: '/businesses', component: Businesses },
