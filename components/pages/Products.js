@@ -156,12 +156,13 @@ const Products = {
     if (error) throw error;
 
     //this.searchResults = data;
+    //console.log(data);
     this.$store.commit("SET_PRODUCTS", data);
     this.$store.commit("SET_DATA_FETCHED", {
       type: 'productsFetched',
       data: true
     });
-    //console.log(data)
+    console.log(data)
   } catch (e) {
     console.log('error occurred: ' + e);
     this.loadError = true;

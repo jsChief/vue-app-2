@@ -16,8 +16,8 @@ const router = new VueRouter({
   //mode: 'history',
   
 routes: [
-{ path: '/', component: Login },
-{ path: '/home', component: Home },
+{ path: '/u', component: Login },
+{ path: '/', component: Home },
 { path: '/temp', component: Template },
 { path: '/about/:selectedStaffIndex', component: About, props: true },
 { path: '/staffdetails/:staffIndex', component: StaffDetails, props: true },

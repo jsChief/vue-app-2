@@ -9,6 +9,7 @@ const store = new Vuex.Store({
             containerHighest: ' bg-white/70',
             containerHigh: ' bg-neutral-100/50',
             container: ' bg-neutral-200/50',
+            containerLowest: ' bg-neutral-200/80',
             inverseContainer: ' bg-gray-800/50',
             surface: ' bg-neutral-100/90',
             placeholderText: ' placeholder-gray-600'
@@ -21,6 +22,7 @@ const store = new Vuex.Store({
             containerHighest: ' bg-gray-500/50',
             containerHigh: ' bg-gray-600/30',
             container: ' bg-gray-800/50',
+            containerLowest: ' bg-gray-800/80',
             inverseContainer: ' bg-neutral-200/50',
             surface: ' bg-gray-800/80',
             placeholderText: ' placeholder-gray-400'

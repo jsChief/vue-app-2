@@ -1,10 +1,10 @@
 const ProductPage = {
   template: `
   
- <div class="h-full w-full flex flex-col place-content-evenly items-center gap-2">
+ <div class="h-full w-full flex flex-col place-content-end items-center gap-2">
  
- 
-  <!-- Search and filter(tabs) -->
+    <div class="z-99 top-0 left-0 absolute w-full h-fit">
+      <!-- Search and filter(tabs) -->
     <div :class="[theme.border, theme.container]" class="border rounded-4xl p-2 w-95/100 mx-auto h-30 flex flex-col items-center place-content-between backdrop-blur">
       
       <div class="w-full flex items-center rounded-4xl" :class="theme.containerHighest">
@@ -15,7 +15,7 @@ const ProductPage = {
       <!-- Tab bar -->
     <div
     class="relative border flex w-full rounded-3xl p-1"
-    :class="theme.border"
+    :class="[theme.border, theme.container]"
     ref="bar"
   >
     <!-- Pill -->
@@ -43,40 +43,13 @@ const ProductPage = {
       @touchstart.prevent="onDragStart"
     ></div>
   </div>
-      
-      
-      <!-- Tab Bar --
-      
-  <div class="w-full relative border flex rounded-3xl p-1" :class="theme.border">
-
-    <!-- Sliding pill --
-    <div
-      class="tab-slider"
-      :class="activePillColor"
-      :style="{
-        left: sliderLeft + 'px',
-        width: sliderWidth + 'px'
-      }"
-    ></div>
-
-    <!-- Tab buttons --
-    <button
-      v-for="(tab, i) in tabs"
-      :key="tab.id"
-      :ref="'tab_' + i"
-      class="tab-btn flex-1 py-2 px-3 text-sm rounded-lg text-center select-none"
-      :style="{ color: activeTab === i ? '#fff' : '#888' }"
-      @click="switchTab(i)"
-    >
-      <span class="text-sm fa" :class="tab.icon"></span>
-      {{ tab.label }}
-    </button>
-  </div> -->
   
+  </div>
     </div>
+  
     
     <!-- data output -->
-    <div class="mx-auto backdrop-blur border rounded-[30px] w-95/100 h-70/100" :class="[theme.border, theme.container]">
+    <div class="mx-auto mb-2 backdrop-blur border rounded-[30px] w-95/100 h-78/100" :class="[theme.border, theme.container]">
       <!-- load state -->
         <div v-if="isLoading" class="h-full  flex flex-col items-center place-content-center">
           <img class="w-16" src="../../assets/infinite-spinner.svg">

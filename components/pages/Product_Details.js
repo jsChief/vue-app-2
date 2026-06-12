@@ -24,7 +24,7 @@ const ProductDetails = {
         
         <!-- Dots -->
         <div v-if="slides.length > 1" class="w-full flex items-center place-content-center absolute bottom-0 left-0 z-20">
-          <div class="flex items-center py-2 px-4 rounded-t-2xl gap-2 backdrop-blur" :class="theme.containerHighest">
+          <div class="flex items-center py-2 px-4 rounded-t-2xl gap-2 backdrop-blur border" :class="[theme.containerLowest,theme.border]">
             <div v-for="(s, i) in slides" :key="i"
              class="dot"
              :class="[theme.inverseContainer, { active: i === current }]"
@@ -88,6 +88,12 @@ const ProductDetails = {
       {{product.name}}
     </h1>
     
+    <!-- Price -->
+    <div class="mt-2 h-fit flex items-baseline gap-3 ">
+      <span class="text-xl font-800 brand" style="font-family:'Syne',sans-serif;font-weight:800;">{{'#'+product.price}}</span>
+      
+    </div>
+    
     <!-- Rating -->
     <div class="flex items-center gap-2 mb-4">
       <div class="flex gap-0.5 text-base">
@@ -105,18 +111,19 @@ const ProductDetails = {
       
     </p>
 
-    <div class="divider mb-6"></div>
-
-    <!-- Price -->
-    <div class="h-30 flex items-baseline gap-3 ">
-      <span class="text-xl font-800 brand" style="font-family:'Syne',sans-serif;font-weight:800;">{{'#'+product.price}}</span>
-      <span :class="theme.subtitle" class="text-base line-through">#429</span>
-      <span class="text-xs font-700 brand" style="font-family:'Syne',sans-serif;font-weight:700;">19% OFF</span>
-    </div>
+    <div class="divider mb-2"></div>
     
+    <p class="mt-2 bg-purple-400/20 rounded-2xl backdrop-blur p-2">ID: {{product.id}}</p>
+    <p class="mt-2 bg-purple-400/20 rounded-2xl backdrop-blur p-2">Date Added: {{product.created_at}}</p>
+    <p class="mt-2 bg-purple-400/20 rounded-2xl backdrop-blur p-2">Status: {{product.status}}</p>
+    <p class="mt-2 bg-purple-400/20 rounded-2xl backdrop-blur p-2">Featured: {{product.featured}}</p>
+    <p class="mt-2 bg-purple-400/20 rounded-2xl backdrop-blur p-2">Rating: {{product.rating}}</p>
+    <p class="mt-2 bg-purple-400/20 rounded-2xl backdrop-blur p-2">Stock: {{product.stock}}</p>
+    <p class="mt-2 bg-purple-400/20 rounded-2xl backdrop-blur p-2">Store Id: {{product.store_id}}</p>
+    <p class="mt-2 bg-purple-400/20 rounded-2xl backdrop-blur p-2">Store Name: {{product.store_name}}</p>
 
     <!-- CTAs -->
-    <div class="flex gap-3">
+    <div class="flex gap-3 mt-2">
       <button class="btn-primary flex-1 py-4 rounded-2xl text-white text-sm">Contact seller</button>
     </div>
   
