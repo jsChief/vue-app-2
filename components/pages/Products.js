@@ -1,37 +1,30 @@
-/*var pk = ["cello","mello","hello"];
-var id = pk.indexOf("hello");
-pk.splice(id,1);
-console.log(pk.some((e,i)=>e=="mello"), pk);
-*/
+import {FilterButton} from '../widgets/FilterButton.js';
+
 const Products = {
   template: `
   <div class="h-full w-full flex flex-col place-content-evenly items-center gap-2">
   
-    <div :class="theme.border" class="border rounded-4xl p-2 w-90/100 mx-auto h-30 flex flex-col items-center place-content-between backdrop-blur">
+    <div :class="[theme.border, theme.container]" class="border rounded-4xl p-2 w-95/100 mx-auto h-30 flex flex-col items-center place-content-between backdrop-blur">
       
       <div class="w-full flex items-center rounded-4xl" :class="theme.containerHighest">
         <button class="w-12 fa fa-search rounded-l-4xl"></button>
-        <input type="text" @input="delayFetch" class="w-full rounded-r-4xl py-2" v-model="searchQuery" placeholder="Search..."/>
+        <input type="text" @input="delayFetch" class="w-full rounded-r-4xl py-2 placeholder-gray-400" v-model="searchQuery" placeholder="Search..."/>
       </div>
       
       <div class="flex w-full items-center place-content-between p-1" :class="theme.subtitle">
-        <button @click="toggleFilter('approved')" class="rounded-3xl border h-10 w-22 p-2 flex items-center gap-1" :class="[{'bg-green-500 text-white': searchTags.approved}, theme.border]">
-          <span class="text-sm fa fa-check-circle"></span>
-          <span class="text-xs">approved</span>
-        </button>
-        <button @click="toggleFilter('pending')" class="rounded-3xl text-sm border h-10 w-22 p-2 flex items-center gap-1" :class="[{'bg-orange-500 text-white': searchTags.pending}, theme.border]">
-          <span class="text-sm fa fa-clock"></span>
-          <span class="text-xs">pending</span>
-        </button>
-        <button @click="toggleFilter('rejected')" class="rounded-3xl text-sm border h-10 w-22 p-2 flex items-center gap-1" :class="[{'bg-red-500 text-white': searchTags.rejected}, theme.border]">
-          <span class="text-sm fa fa-circle-xmark"></span>
-          <span class="text-xs">rejected</span>
-        </button>
+      
+        <filter-button @buttonClick="toggleFilter('approved')" icon="fa-check-circle" activeBg="bg-green-500" :active="searchTags.approved">approved
+        </filter-button>
+        <filter-button @buttonClick="toggleFilter('pending')" icon="fa-clock" activeBg="bg-orange-500" :active="searchTags.pending">pending
+        </filter-button>
+        <filter-button @buttonClick="toggleFilter('rejected')" icon="fa-circle-xmark" activeBg="bg-red-500" :active="searchTags.rejected">rejected
+        </filter-button>
+        
       </div>
     </div>
     
     <!-- data output -->
-    <div class="mx-auto backdrop-blur border rounded-[30px] w-90/100 h-70/100" :class="theme.border">
+    <div class="mx-auto backdrop-blur border rounded-[30px] w-95/100 h-70/100" :class="[theme.border, theme.container]">
         <div v-if="isLoading" class="h-full  flex flex-col items-center place-content-center">
           <img class="w-16" src="../../assets/infinite-spinner.svg">
         </div>
@@ -65,6 +58,9 @@ const Products = {
   </div>`,
   props: {
 
+  },
+  components: {
+    FilterButton
   },
   data() {
     return {

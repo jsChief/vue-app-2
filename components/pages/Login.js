@@ -17,8 +17,8 @@ const Login = {
       </div>
       
       <div v-show="!authing && !authConfirmed" class="h-full flex flex-col place-content-center fadeUp delay-5">
-        <input type="email" v-model="mail" :class="theme.containerHigh" class="w-full rounded-2xl borde p-2 ring-purple-800 focus:ring" placeholder="Email">
-        <input type="password" v-model="pass" :class="theme.containerHigh" class="w-full rounded-2xl mt-2 p-2 ring-purple-800 focus:ring" placeholder="Password">
+        <input type="email" v-model="mail" :class="[theme.containerHigh, theme.placeholderText]" class="w-full rounded-2xl p-2 ring-purple-800 focus:ring" placeholder="Email">
+        <input type="password" v-model="pass" :class="[theme.containerHigh, theme.placeholderText]" class="w-full rounded-2xl mt-2 p-2 ring-purple-800 focus:ring" placeholder="Password">
          <button @click="login" class="w-full mt-6 p-2 rounded-2xl text-white bg-purple-700">Login</button>
     
       </div>

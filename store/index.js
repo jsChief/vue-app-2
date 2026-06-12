@@ -9,19 +9,21 @@ const store = new Vuex.Store({
             containerHighest: ' bg-white/70',
             containerHigh: ' bg-neutral-100/50',
             container: ' bg-neutral-200/50',
-            inverseContainer: ' bg-neutral-800/50',
+            inverseContainer: ' bg-gray-800/50',
             surface: ' bg-neutral-100/90',
+            placeholderText: ' placeholder-gray-600'
           },
           dark: {
             text: 'text-white',
             subtitle: 'text-gray-400',
             border: ' border-slate-200/10',
             themeBorder: ' myborder',
-            containerHighest: ' bg-neutral-500/50',
-            containerHigh: ' bg-neutral-600/30',
-            container: ' bg-neutral-800/50',
+            containerHighest: ' bg-gray-500/50',
+            containerHigh: ' bg-gray-600/30',
+            container: ' bg-gray-800/50',
             inverseContainer: ' bg-neutral-200/50',
-            surface: ' bg-neutral-800/80'
+            surface: ' bg-gray-800/80',
+            placeholderText: ' placeholder-gray-400'
           }
         },
         productsFilterTags: {
@@ -34,11 +36,23 @@ const store = new Vuex.Store({
           suspended: false,
           banned: false
         },
-        productsFetched: false,
+        productsCategoryFetched: {
+          approved: false,
+          pending: false,
+          rejected: false
+        },
+        //productsFetched: false,
         storesFetched: false,
         usersFetched: false,
         staff: [],
-        products: [],
+        approvedProducts: [],
+        pendingProducts: [],
+        rejectedProducts: [],
+        activeProductsTab: {
+          index: 0,
+          left: 0,
+          width: 0
+        },
         stores: [],
         users: [],
         productsFilters: [],
@@ -60,8 +74,15 @@ const store = new Vuex.Store({
         SET_ERROR(state, error) {
           state.error = error
         },
-        SET_PRODUCTS(state, products) {
-          state.products = products
+        SET_PRODUCTS(state, value) {
+          let typeString = value.type+"Products";
+          state[typeString] = [...value.data]
+        },
+        SET_PRODUCTS_TAB(state, tabData){
+          state.activeProductsTab[tabData.type] = tabData.data;
+        },
+        SET_PRODUCTS_FETCHED(state, value) {
+          state.productsCategoryFetched[value.type] = value.data
         },
         SET_STAFF(state, staff) {
           state.staff = staff
@@ -74,7 +95,7 @@ const store = new Vuex.Store({
         },
         SET_TAG(state, value){
           state[value.type][value.tag] = value.data;
-        },
+        },  
         ADD_FILTER(state, value){
           state[value.type].push(value.data);
         },

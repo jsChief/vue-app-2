@@ -1,0 +1,192 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --bg: #07070f;
+  --panel: #0e0e1c;
+  --border: #1a1a2e;
+  --text: #e0e0f0;
+  --muted: #555577;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Fira Code', monospace;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  padding: 2rem;
+}
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-align: center;
+  background: linear-gradient(135deg, #ffd700, #a855f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.subtitle {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: -2rem;
+  letter-spacing: 0.1em;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  max-width: 900px;
+}
+.demo-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.demo-card h3 {
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ── Staggered Fade In (auto-play) ── */
+.stagger-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.stagger-item {
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  /* Start invisible and shifted */
+  opacity: 0;
+  transform: scale(0.8);
+  animation: slideIn 0.5s ease forwards;
+}
+.stagger-item{
+  animation-delay: calc(var(--i) * 0.1s);
+}
+
+/* .stagger-item:nth-child(1) { animation-delay: 0.1s; }
+.stagger-item:nth-child(2) { animation-delay: 0.2s; }
+.stagger-item:nth-child(3) { animation-delay: 0.3s; }
+.stagger-item:nth-child(4) { animation-delay: 0.4s; }
+.stagger-item:nth-child(5) { animation-delay: 0.5s; } */
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.stagger-icon {
+  font-size: 1rem;
+}
+
+/* ── Staggered Cards (from below) ── */
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.card-item {
+  padding: 1rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: riseUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.card-item:nth-child(1) {
+  background: rgba(255, 111, 216, 0.1);
+  border: 1px solid rgba(255, 111, 216, 0.2);
+  animation-delay: 0.15s;
+}
+.card-item:nth-child(2) {
+  background: rgba(59, 196, 242, 0.1);
+  border: 1px solid rgba(59, 196, 242, 0.2);
+  animation-delay: 0.3s;
+}
+.card-item:nth-child(3) {
+  background: rgba(255, 221, 87, 0.1);
+  border: 1px solid rgba(255, 221, 87, 0.2);
+  animation-delay: 0.45s;
+}
+.card-item:nth-child(4) {
+  background: rgba(20, 255, 180, 0.1);
+  border: 1px solid rgba(20, 255, 180, 0.2);
+  animation-delay: 0.6s;
+}
+@keyframes riseUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.card-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.card-name {
+  font-size: 0.8rem;
+  color: var(--text);
+}
+.card-role {
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+
+/* ── Replay button ── */
+.replay-btn {
+  padding: 0.6rem 1.5rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: var(--muted);
+  font-family: 'Fira Code', monospace;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: center;
+}
+.replay-btn:hover {
+  border-color: rgba(255, 221, 87, 0.4);
+  color: #ffd700;
+}
+footer {
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}

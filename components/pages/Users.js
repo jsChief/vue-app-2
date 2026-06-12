@@ -2,7 +2,7 @@ const Users = {
   template: `
   <div class="h-full w-full flex flex-col place-content-evenly items-center gap-2">
   
-    <div :class="[theme.surface,theme.border]" class="border rounded-4xl p-2 w-95/100 mx-auto h-30 flex flex-col items-center place-content-between backdrop-blur">
+    <div :class="[theme.container,theme.border]" class="border rounded-4xl p-2 w-95/100 mx-auto h-30 flex flex-col items-center place-content-between backdrop-blur">
       
       <div class="w-full flex items-center rounded-4xl" :class="theme.containerHighest">
         <button class="w-12 fa fa-search rounded-l-4xl"></button>
@@ -10,15 +10,15 @@ const Users = {
       </div>
       
       <div class="flex w-full items-center place-content-between p-1" :class="theme.subtitle">
-        <button class="rounded-3xl border h-10 w-23 p-2 flex items-center place-content-center gap-1" :class="[theme.border]">
+        <button @click="toggleFilter('approved')" class="rounded-3xl border h-10 w-22 p-2 flex items-center place-content-center gap-1" :class="[{'bg-green-500 text-white': searchTags.approved}, theme.border]">
           <span class="text-sm fa fa-check-circle"></span>
           <span class="text-xs">approved</span>
         </button>
-        <button class="rounded-3xl text-sm border h-10 w-23 p-2 flex items-center place-content-center gap-1" :class="[theme.border]">
+        <button @click="toggleFilter('pending')" class="rounded-3xl text-sm border h-10 w-22 p-2 flex items-center place-content-center gap-1" :class="[{'bg-orange-500 text-white': searchTags.pending}, theme.border]">
           <span class="text-sm fa fa-clock"></span>
           <span class="text-xs">suspended</span>
         </button>
-        <button class="rounded-3xl text-sm border h-10 w-23 p-2 flex items-center place-content-center gap-1" :class="[theme.border]">
+        <button @click="toggleFilter('rejected')" class="rounded-3xl text-sm border h-10 w-22 p-2 flex items-center place-content-center gap-1" :class="[{'bg-red-500 text-white': searchTags.rejected}, theme.border]">
           <span class="text-sm fa fa-circle-xmark"></span>
           <span class="text-xs">banned</span>
         </button>
@@ -26,7 +26,7 @@ const Users = {
     </div>
     
     <!-- data output -->
-    <div class="mx-auto backdrop-blur border rounded-[30px] w-95/100 h-70/100" :class="[theme.surface, theme.border]">
+    <div class="mx-auto backdrop-blur border rounded-[30px] w-95/100 h-70/100" :class="[theme.container, theme.border]">
         <div v-if="isLoading" class="h-full  flex flex-col items-center place-content-center">
           <img class="w-16" src="../../assets/infinite-spinner.svg">
         </div>
@@ -57,10 +57,9 @@ const Users = {
           </li>
         </ul>
         
-        </div>
+        </div> -->
     </div>
-    -->
-    
+    </div>
   </div>
   `,
   data(){
@@ -90,12 +89,12 @@ const Users = {
       var status = hasFilter ? false : true;
       
       this.$store.commit(filterCommit, {
-        type: 'productsFilters',
+        type: 'usersFilters',
         data: filter
       })
       
       this.$store.commit("SET_TAG", {
-        type: 'productsFilterTags',
+        type: 'usersFilterTags',
         tag: filter,
         data: status
       });

@@ -129,7 +129,7 @@ const ProductDetails = {
 
 </div>
   `,
-  props: ['productIndex'],
+  props: ['productData'],
   data(){
     return {
       current: 0,
@@ -139,28 +139,35 @@ const ProductDetails = {
       progressTimer: null,
       touchStartX: 0,
       autoplayInterval: 5000,
-      autoplay: false
+      autoplay: false,
+      productIndex: 0,
+      productType: '',
+      typeString: ''
     }
   },
   computed: {
+    product(){
+      return this.$store.state[this.typeString][this.productIndex];
+    },
     parsedText() {
-    return this.parseTypeset(this.$store.state.products[this.$props.productIndex].description);
+    return this.parseTypeset(this.$store.state[this.typeString][this.productIndex].description);
   },
     theme() {
       return this.$store.state.darkTheme ? this.$store.state.theme.dark : this.$store.state.theme.light
     },
-    product(){
-      return this.$store.state.products[this.$props.productIndex];
-    },
+    
     slides(){
-      return this.$store.state.products[this.$props.productIndex].image_urls
+      return this.$store.state[this.typeString][this.productIndex].image_urls
     }
   },
-  mounted() {
-    
-    this.startAutoplay();
-    
+  created(){
+    this.productIndex = this.$props.productData.split('_')[0] * 1;
+    this.productType = this.$props.productData.split('_')[1];
+    this.typeString = this.productType+"Products";
   },
+  /*mounted() {
+    
+  },*/
   beforeDestroy() {
     this.clearAutoplay();
   },

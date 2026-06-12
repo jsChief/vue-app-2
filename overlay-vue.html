@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Overlay</title>
+<script src="./js/TW4.js"></script>
+<script src="./js/vue2.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          syne: ['Syne', 'sans-serif'],
+          dm: ['DM Sans', 'sans-serif'],
+        },
+        colors: {
+          brand: '#AC41FF',
+          'brand-dim': 'rgba(172,65,255,0.15)',
+          'brand-glow': 'rgba(172,65,255,0.4)',
+          surface: 'rgba(18,18,28,0.92)',
+        },
+        keyframes: {
+          'modal-in': {
+            '0%':   { opacity: '0', transform: 'translateY(20px) scale(0.97)' },
+            '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+          },
+          'overlay-in': {
+            '0%':   { opacity: '0' },
+            '100%': { opacity: '1' },
+          },
+        },
+        animation: {
+          'modal-in':   'modal-in 0.35s cubic-bezier(0.22,1,0.36,1) forwards',
+          'overlay-in': 'overlay-in 0.25s ease forwards',
+        },
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: 'DM Sans', sans-serif; }
+
+  /* Accent top line on modal */
+  .modal-accent::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #AC41FF, transparent);
+    border-radius: 99px;
+  }
+
+  /* Grid background */
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(172,65,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(172,65,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px rgba(172,65,255,0.06) inset !important;
+    -webkit-text-fill-color: #f0eaf8 !important;
+    caret-color: #f0eaf8;
+  }
+</style>
+</head>
+<body class="bg-[#0a0a0f] text-[#f0eaf8] min-h-screen overflow-hidden">
+
+<div id="app">
+
+  <!-- Background -->
+  <div class="fixed inset-0 pointer-events-none">
+    <div class="absolute inset-0"
+      style="background: radial-gradient(ellipse 80% 60% at 20% 80%, rgba(172,65,255,0.12) 0%, transparent 60%),
+                         radial-gradient(ellipse 60% 80% at 80% 20%, rgba(90,30,180,0.10) 0%, transparent 60%),
+                         #0a0a0f;">
+    </div>
+    <div class="absolute inset-0 bg-grid"></div>
+  </div>
+
+  <!-- Page content -->
+  <div class="relative z-10 flex flex-col items-center justify-center min-h-screen text-center px-4">
+    <h1 class="font-syne font-extrabold text-5xl tracking-tight mb-2"
+      style="background: linear-gradient(135deg, #fff 30%, #AC41FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+      Welcome back.
+    </h1>
+    <p class="text-[rgba(240,234,248,0.45)] text-base mb-8">Click below to sign in to your account</p>
+    <button
+      @click="open = true"
+      class="font-dm font-medium text-sm tracking-widest text-white px-8 py-3 rounded-xl border-0 cursor-pointer transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0"
+      style="background: linear-gradient(135deg, #AC41FF, #7b2ce0); box-shadow: 0 0 24px rgba(172,65,255,0.4);">
+      Sign in →
+    </button>
+  </div>
+
+  <!-- Overlay -->
+  <transition name="fade">
+    <div
+      v-if="open"
+      class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl"
+      style="background: rgba(6,4,14,0.25);"
+      @click.self="open = false"
+      @keydown.esc.window="open = false"
+    >
+
+      <!-- Modal card -->
+      <div
+        class="modal-accent relative w-full max-w-sm mx-4 rounded-2xl p-10 animate-modal-in"
+        style="background: rgba(18,18,28,0.92);
+               border: 1px solid rgba(172,65,255,0.2);
+               box-shadow: 0 0 0 1px rgba(172,65,255,0.08), 0 32px 80px rgba(0,0,0,0.6), 0 0 60px rgba(172,65,255,0.08) inset;"
+        @click.stop
+      >
+
+        <!-- Header -->
+        <div class="mb-7">
+          <p class="font-dm font-medium text-[0.7rem] tracking-[0.15em] uppercase text-brand mb-1">Authentication</p>
+          <h2 class="font-syne font-bold text-2xl tracking-tight text-[#f0eaf8] leading-tight">Sign in</h2>
+          <p class="text-[0.82rem] text-[rgba(240,234,248,0.45)] mt-1">Enter your credentials to continue</p>
+        </div>
+
+        <!-- Email field -->
+        <div class="mb-4">
+          <label for="email" class="block font-dm font-medium text-[0.72rem] tracking-widest uppercase text-[rgba(240,234,248,0.45)] mb-2">
+            Email address
+          </label>
+          <input
+            id="email"
+            v-model="email"
+            type="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            class="w-full rounded-xl px-4 py-3 font-dm text-sm text-[#f0eaf8] placeholder-[rgba(240,234,248,0.25)] outline-none transition-all duration-200"
+            style="background: rgba(255,255,255,0.04); border: 1px solid rgba(172,65,255,0.18);"
+            @focus="focusEmail = true" @blur="focusEmail = false"
+            :style="focusEmail
+              ? 'background: rgba(172,65,255,0.06); border: 1px solid #AC41FF; box-shadow: 0 0 0 3px rgba(172,65,255,0.12);'
+              : 'background: rgba(255,255,255,0.04); border: 1px solid rgba(172,65,255,0.18);'"
+          >
+        </div>
+
+        <!-- Password field -->
+        <div class="mb-6">
+          <label for="password" class="block font-dm font-medium text-[0.72rem] tracking-widest uppercase text-[rgba(240,234,248,0.45)] mb-2">
+            Password
+          </label>
+          <input
+            id="password"
+            v-model="password"
+            type="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            class="w-full rounded-xl px-4 py-3 font-dm text-sm text-[#f0eaf8] placeholder-[rgba(240,234,248,0.25)] outline-none transition-all duration-200"
+            @focus="focusPass = true" @blur="focusPass = false"
+            :style="focusPass
+              ? 'background: rgba(172,65,255,0.06); border: 1px solid #AC41FF; box-shadow: 0 0 0 3px rgba(172,65,255,0.12);'
+              : 'background: rgba(255,255,255,0.04); border: 1px solid rgba(172,65,255,0.18);'"
+          >
+        </div>
+
+        <!-- Submit -->
+        <button
+          class="w-full font-dm font-medium text-sm tracking-widest text-white py-3 rounded-xl border-0 cursor-pointer transition-all duration-150 hover:-translate-y-px active:translate-y-0"
+          style="background: linear-gradient(135deg, #AC41FF 0%, #7b2ce0 100%); box-shadow: 0 4px 20px rgba(172,65,255,0.35);"
+        >
+          Continue
+        </button>
+
+        <!-- Footer -->
+        <p class="text-center text-[0.78rem] text-[rgba(240,234,248,0.45)] mt-5">
+          Don't have an account?
+          <a href="#" class="text-brand font-medium hover:underline">Create one</a>
+        </p>
+
+        <!-- Close hint -->
+        <div class="absolute -bottom-9 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[0.7rem] text-white/25 whitespace-nowrap tracking-wide pointer-events-none select-none">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-opacity="0.5"/>
+            <line x1="4" y1="4" x2="8" y2="8" stroke="currentColor" stroke-opacity="0.5" stroke-linecap="round"/>
+            <line x1="8" y1="4" x2="4" y2="8" stroke="currentColor" stroke-opacity="0.5" stroke-linecap="round"/>
+          </svg>
+          Click outside to dismiss
+        </div>
+
+      </div>
+    </div>
+  </transition>
+
+</div>
+
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      open: false,
+      email: '',
+      password: '',
+      focusEmail: false,
+      focusPass: false,
+    },
+    watch: {
+      open(val) {
+        if (val) {
+          this.$nextTick(() => {
+            document.getElementById('email')?.focus();
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<style>
+  .fade-enter-active { animation: overlay-in 0.25s ease forwards; }
+  .fade-leave-active { animation: overlay-in 0.2s ease reverse forwards; }
+  @keyframes overlay-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes modal-in {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+</style>
+</body>
+</html>

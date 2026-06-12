@@ -2,13 +2,13 @@ import {NavButton} from '../widgets/NavButton.js';
 
 const Home = {
   template: `
-  
-  <div v-if="loading" class="h-full  flex flex-col items-center place-content-center">
+<div v-if="loading" class="h-full  flex flex-col items-center place-content-center">
         <img class="w-16" src="../../assets/infinite-spinner.svg">
       </div>
      
   <div v-else-if="error" class="h-full  flex flex-col items-center place-content-center">
         <img class="w-16" src="../../assets/error-icon.svg">
+        <button class="py-2 mt-2 rounded-3xl px-4 bg-purple-600 text-white font-bold"><span @click=""fetchStaff class="fa fa-reload"></span>retry</button>
       </div>
       
   <div v-else class="h-full rounded-2xl overflow-y-scroll p-2">
@@ -28,9 +28,19 @@ const Home = {
         </div>
       </div>
       
-      <div class="h-64">
+      <div v-for="item in 'abcd'" class="h-64 mt-4 bg-purple-500/20 rounded-2xl w-full mx-auto flex flex-col items-center place-content-center font-bold">Spacer</div>
       
+      
+      <div v-show="showOverlay" class="h-screen w-screen top-0 left-0 backdrop-blur absolute z-20 flex flex-col items-center place-content-center" @click.self="showOverlay=false">
+      
+        <div class="relative rounded-2xl w-80/100 h-80/100" :class="[theme.container+'/50']">
+        </div>
       </div>
+      
+      
+      <button @click="addStaff" class="absolute bottom-25 right-5 z-10 rounded-2xl myborder py-2 px-4 backdrop-blur bg-purple-500/20 font-bold"><span class="fa fa-plus-circle"></span> Add Staff</button>
+      
+      
       
       <div class="p-2 absolute bottom-0 left-0 w-full h-fit duration-400 rounded-t-[30px] flex flex-col items-center place-content-end">
         <!-- Nav Menu -->
@@ -65,8 +75,10 @@ const Home = {
           <button @click="logout" class="text-white text-xl p-2 size-12 rounded-full rounded-3xl bg-gradient-to-b from-purple-600 to-purple-800 fa fa-right-from-bracket">
           </button>
         </div>
+        
       </div>
-    </div>`,
+    </div>
+  `,
   data(){
     return {
       navData: {
@@ -76,6 +88,7 @@ const Home = {
         }
       },
       showNav: false,
+      showOverlay: false
     }
   },
   components: {
@@ -91,11 +104,17 @@ const Home = {
       },
   created() {
         // Only fetch if not already loaded
-        if (this.$store.state.staff.length === 0) {
-          this.$store.dispatch('fetchStaff')
-        }
+        this.fetchStaff();
       },
   methods: {
+    addStaff(){
+      this.showOverlay = true;
+    },
+    fetchStaff(){
+      if (this.$store.state.staff.length === 0) {
+          this.$store.dispatch('fetchStaff')
+        }
+    },
     logStuff(){
       //console.log(this.allStaff[3])
     },

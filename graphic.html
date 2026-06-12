@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <link rel="stylesheet" href="./styles/style.css">
+  <script src="./js/vue2.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/TW4.js" type="text/javascript" charset="utf-8"></script>
+  
+</head>
+
+<body class="text-bf">
+  <div id="app">
+  <div class="w-80 rounded-xl">
+    <img src="./assets/flowers.jpg" class="w-80" alt="">
+  </div>
+  <div class="absolute top-0 left-0 w-80 h-113 flex flex-col place-content-center items-center">
+    
+    <ul>
+      <li v-for="item in declarations">
+        <div class="w-70 h-10 mt-3 px-2 backdrop-blur-sm bg-white/50 border border-neutral-300/40 rounded-3xl flex items-center">
+          <span class="py-1 px-2 font-bold rounded-2xl" :class="colorClass(item.color)">{{item.name}}</span>
+          <p class="pl-2">{{item.text}}</p>
+        </div>
+      </li>
+    </ul>
+    
+  </div>
+  
+  
+  </div>
+  <script type="text/javascript" charset="utf-8">
+    var vue = new Vue({
+      el: "#app",
+      data: {
+        declarations: [
+          {
+            name: "James",
+            color: "amber",
+            text: "I have hope"
+          },
+          {
+            name: "Cole",
+            color: "emerald",
+            text: "doing my best"
+          }
+        ]
+      },
+      computed: {
+
+      },
+      methods: {
+        colorClass(color){
+          return ` bg-${color}-300/50 text-${color}-600`;
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

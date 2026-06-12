@@ -7,13 +7,12 @@
 
   <title>Vue_app_2</title>
   
-  
-  
+  <script src="./js/TW4.js"></script>
   <script src="./js/supabase.js"></script>
   <script src="./js/vue2.js"></script>
   <script src="./js/vuex3.6.2.js"></script>
   <script src="./js/vue-router3.js"></script>
-  <script src="./js/TW4.js"></script>
+  
   <link rel="stylesheet" href="./styles/style.css">
   <link rel="stylesheet" href="./assets/all_fonts.css">
   <script src="./js/anime.min.js"></script>
@@ -22,7 +21,7 @@
 <body class="text-bf">
   <div id="app" :class="themeClass" class="w-screen h-screen">
     
-    <div :class="{'bg-[url(./assets/bg-dark.jpeg)] bg-neutral-900': darkTheme, 'bg-[url(./assets/bg-light.jpeg)] bg-neutral-900': !darkTheme}" class="bg-cover h-full w-full"></div>
+    <div :class="{'bg-[url(./assets/bg-dark.jpeg)] bg-neutral-900': darkTheme, 'bg-[url(./assets/bg-light-01.jpeg)] bg-neutral-900': !darkTheme}" class="bg-cover h-full w-full"></div>
     
     
     <div class="absolute z-10 w-screen h-screen top-0 left-0 backdrp-blur bg-black/20">
@@ -43,9 +42,9 @@
   const client = createClient('https://iywrbvtzkfyhcbsiybke.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5d3JidnR6a2Z5aGNic2l5YmtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU5NzE2NDUsImV4cCI6MjA2MTU0NzY0NX0.0GWAxHnXsWhtbbbOm4PXJd8UUTHMKJq9eE62AEn29dg',
   {
     
-    auth: {
+    /*auth: {
     persistSession: true
-  }
+  }*/
   }
   )
   

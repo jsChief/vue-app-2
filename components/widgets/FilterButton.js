@@ -1,14 +1,15 @@
 const FilterButton = {
   template: `
-    <div @click="doOnClick" class="p-2 w-16 h-22 flex flex-col rounded-xl active:bg-slate-200/30 duration-400 place-content-around items-center">
-       <button class="size-12 rounded-full fa" :class="[displayIcon, theme.containerHigh]">
-       </button>
-       <p class="text-xs mt-1"> {{displayText}} </p>
-     </div>
+    <button @click="doOnClick" class="rounded-3xl border h-10 w-22 p-2 flex items-center place-content-center gap-1" :class="[classActive, theme.border]">
+      <span class="text-sm fa" :class="icon"></span>
+      <span class="text-xs text-center"><slot></slot></span>
+    </button>
   `,
   props: {
-    displayIcon: String,
-    displayText: String
+    icon: String,
+    activeBg: String,
+    text: String,
+    active: Boolean
   },
   data() {
     return {
@@ -16,6 +17,9 @@ const FilterButton = {
     }
   },
   computed: {
+    classActive(){
+      return this.$props.active? this.$props.activeBg+" text-white" : "";
+    },
     theme() {
       return this.$store.state.darkTheme ? this.$store.state.theme.dark : this.$store.state.theme.light
     }

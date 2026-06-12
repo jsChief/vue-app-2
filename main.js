@@ -1,9 +1,11 @@
 import {Home} from './components/pages/Hr.js';
 import {About} from './components/pages/About.js';
 import {Login} from './components/pages/Login.js'
+import {Template} from './components/pages/Template.js'
 import {StaffDetails} from './components/pages/Staff_details.js'
 import {Businesses} from './components/pages/Businesses.js';
 import {Products} from './components/pages/Products.js';
+import {ProductPage} from './components/pages/Product_Page.js';
 import {Users} from './components/pages/Users.js';
 import {Settings} from './components/pages/Settings.js';
 import {ProductDetails} from './components/pages/Product_Details.js';
@@ -17,15 +19,17 @@ const { data, error } = await client.from('staff_profiles').select('*');
 const router = new VueRouter({
   //mode: 'history',
 routes: [
-{ path: '/t', component: Login },
-{ path: '/', component: Home },
+{ path: '/', component: Login },
+{ path: '/home', component: Home },
+{ path: '/tem', component: Template },
 { path: '/about/:selectedStaffIndex', component: About, props: true },
 { path: '/staffdetails/:staffIndex', component: StaffDetails, props: true },
 { path: '/businesses', component: Businesses },
-{ path: '/products', component: Products },
+{ path: '/products', component: ProductPage },
+//{ path: '/pf', component: ProductPage },
 { path: '/users', component: Users },
 { path: '/settings', component: Settings },
-{ path: '/productdetails/:productIndex', component: ProductDetails, props: true },
+{ path: '/productdetails/:productData', component: ProductDetails, props: true },
 { path: '/stores', component: Stores },
 ]
 });

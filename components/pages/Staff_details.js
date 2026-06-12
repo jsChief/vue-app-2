@@ -17,20 +17,21 @@ const StaffDetails = {
 
         <!-- Name & role -->
         <div class="flex-1 min-w-0">
-          <div class="flex flex-wrap items-center gap-3 mb-1">
-            <h1 class="font-display font-extrabold text-xl  tracking-tight leading-tight">
+          <div class="flexa flexa-wrap items-center gap-3 mb-4">
+            <h1 class="font-display font-extrabold text-2xl  tracking-tight leading-tight mb-1">
               {{staff.first_name + ' ' + staff.last_name}}
             </h1>
-            <div :class="theme.container" class="px-2 py-1 border border-green-500/30 flex items-center rounded-2xl text-xs text-green-500 gap-2">
+            <p class="text-purple-500 font-display font-semibold text-sm mb-2">{{ staff.bio }}</p>
+            <div :class="theme.container" class="px-2 py-1 border border-green-500/30 flex items-center rounded-2xl text-xs text-green-500 gap-2 w-fit">
               <div class="h-2 w-2 rounded-full bg-green-500"></div>
               {{ staff.status }}
             </div>
           </div>
-          <p class="text-purple-500 font-display font-semibold text-sm mb-2">{{ staff.bio }}</p>
+          
           <div class="flex flex-wrap items-center gap-3 text-xs" :class="theme.subtitle">
             <span class="flex items-center gap-1">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Lagos, Nigeria
+              {{staff.location}}
             </span>
             <span class="flex items-center gap-1">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
@@ -77,7 +78,7 @@ const StaffDetails = {
          style="background: rgba(255,255,255,0.025); border: 1px solid rgba(172,65,255,0.12);">
       <p class="section-label mb-3">About</p>
       <p class="text-sm leading-relaxed" :class="theme.subtitle">
-        James is a results-driven product designer with a passion for human-centred experiences. He blends strategic thinking with visual craft to deliver interfaces that are both beautiful and deeply functional. Known for bringing calm clarity to complex design challenges.
+        {{staff.first_name + ' ' + staff.last_name}} is a results-driven product designer with a passion for human-centred experiences. He blends strategic thinking with visual craft to deliver interfaces that are both beautiful and deeply functional. Known for bringing calm clarity to complex design challenges.
       </p>
     </div>
 
