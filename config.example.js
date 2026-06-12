@@ -1,0 +1,4 @@
+export const CONFIG = {
+  API_URL: "SUPABASE_API_URL_HERE",
+  ANON_KEY: "SUPABASE_ANON_KEY_HERE"
+};
