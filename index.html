@@ -21,11 +21,12 @@
 <body class="text-bf">
   <div id="app" :class="themeClass" class="w-screen h-screen">
     
-    <div :class="{'bg-[url(./assets/bg-dark.jpeg)] bg-neutral-900': darkTheme, 'bg-[url(./assets/bg-light-01.jpeg)] bg-neutral-900': !darkTheme}" class="bg-cover h-full w-full"></div>
-    
+    <div :class="{'bg-[url(./assets/bg-dark-abstract.svg)] bg-neutral-900': darkTheme, 'bg-[url(./assets/bg-light-abstract.svg)] bg-neutral-900': !darkTheme}" class="bg-cover h-full w-full"></div>
+   
     
     <div class="absolute z-10 w-screen h-screen top-0 left-0 backdrp-blur bg-black/20">
-      <button @click="toggleTheme" class="absolute bottom-10 right-5 z-99 rounded-2xl myborder py-2 px-4 backdrop-blur">toggle theme</button>
+      <button @click="toggleTheme" :class="{'fa-moon': darkTheme, 'fa-sun': !darkTheme}" class="z-99 absolute bottom-0 left-0 rounded-t-2xl rounded-br-2xl myborder py-2 px-4 backdrop-blur fa"></button>
+      
       <main class="h-full">
         <router-view/>
       </main>
@@ -33,10 +34,10 @@
     </div>
     
     
-    
   </div>
   <script src="./config.js" type="text/javascript"></script>
   <script>
+  
   const { createClient } = supabase;
 
   const client = createClient(CONFIG.API_URL,CONFIG.ANON_KEY,
@@ -66,7 +67,6 @@ async function signOut() {
     const { data: { user } } = await client.auth.getUser();
     return user;
   }
-  
 </script>
   <script src="./store/index.js"></script>
   <script type="module" src="main.js"></script>

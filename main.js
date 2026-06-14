@@ -1,10 +1,7 @@
 import {Home} from './components/pages/Hr.js';
-import {About} from './components/pages/About.js';
 import {Login} from './components/pages/Login.js'
-import {Template} from './components/pages/Template.js'
 import {StaffDetails} from './components/pages/Staff_details.js'
 import {Businesses} from './components/pages/Businesses.js';
-import {Products} from './components/pages/Products.js';
 import {ProductPage} from './components/pages/Product_Page.js';
 import {Users} from './components/pages/Users.js';
 import {Settings} from './components/pages/Settings.js';
@@ -16,14 +13,11 @@ const router = new VueRouter({
   //mode: 'history',
   
 routes: [
-{ path: '/u', component: Login },
-{ path: '/', component: Home },
-{ path: '/temp', component: Template },
-{ path: '/about/:selectedStaffIndex', component: About, props: true },
+{ path: '/', component: Login },
+{ path: '/home', component: Home },
 { path: '/staffdetails/:staffIndex', component: StaffDetails, props: true },
 { path: '/businesses', component: Businesses },
 { path: '/products', component: ProductPage },
-//{ path: '/pf', component: ProductPage },
 { path: '/users', component: Users },
 { path: '/settings', component: Settings },
 { path: '/productdetails/:productData', component: ProductDetails, props: true },
@@ -31,11 +25,13 @@ routes: [
 ]
 });
 
+
 var vue = new Vue({
 el: "#app",
 store,
 data: {
- navOpen: false
+ navOpen: false,
+ count: 0
 },
 computed: {
   darkTheme(){
@@ -49,6 +45,7 @@ methods: {
   toggleTheme(){
     let theme = this.$store.state.darkTheme;
     this.$store.commit("SET_DARKTHEME", !theme)
+    console.log(theme);
   },
   fetchUser() { this.$store.dispatch('fetchUser') },
   toAbout(){
